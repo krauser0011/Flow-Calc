@@ -1,166 +1,7 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FlowCalc 4.5 | Zinli & Wally Edition</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    
-    <style>
-        :root {
-            --bg-body: #f1f5f9; --bg-card: #ffffff; --text-main: #0f172a;
-            --accent-bdv: #ef4444; --accent-wally: #6366f1; --accent-zinli: #00d1b2;
-            --accent-binance: #f59e0b; --accent-retorno: #10b981; --border: #e2e8f0;
-        }
-        [data-bs-theme="dark"] {
-            --bg-body: #020617; --bg-card: #1e293b; --text-main: #f1f5f9; --border: #334155;
-        }
-
-        body { background-color: var(--bg-body); color: var(--text-main); font-family: 'Inter', sans-serif; padding: 20px 0; }
-        .card { border-radius: 20px; border: 1px solid var(--border); background: var(--bg-card); transition: all 0.3s; }
-        .header-section { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: white; padding: 25px; border-radius: 24px; margin-bottom: 25px; }
-        .form-control {
-            background-color: rgba(0,0,0,0.02); border: 2px solid var(--border);
-            color: var(--text-main); border-radius: 12px; font-weight: 700; 
-            font-family: 'JetBrains+Mono', monospace; text-align: center;
-        }
-        .form-control:focus { border-color: var(--accent-wally); box-shadow: none; background: white; }
-        .semaforo { height: 10px; border-radius: 10px; margin-top: 10px; background: #cbd5e1; }
-        .semaforo-verde { background: #10b981; box-shadow: 0 0 10px rgba(16,185,129,0.4); }
-        .semaforo-amarillo { background: #f59e0b; }
-        .semaforo-rojo { background: #ef4444; }
-        .table-custom { font-size: 0.85rem; border-radius: 15px; overflow: hidden; }
-        .theme-toggle { position: fixed; top: 20px; right: 20px; cursor: pointer; padding: 10px; border-radius: 50%; background: var(--bg-card); z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    </style>
-</head>
-<body data-bs-theme="light">
-
-<div class="theme-toggle" onclick="toggleTheme()">🌓</div>
-
-<div class="container">
-    <div class="header-section shadow-lg">
-        <div class="row align-items-center">
-            <div class="col-6">
-                <h2 class="fw-bold mb-0">📊 FlowCalc <span style="color: #38bdf8;">4.5</span></h2>
-                <small class="opacity-75">Multidivisa: Wally & Zinli</small>
-            </div>
-            <div class="col-6 text-end">
-                <small class="d-block opacity-50">GANANCIA HOY</small>
-                <h3 class="fw-bold mb-0 text-success" id="ganancia_total_dia">0.00 Bs</h3>
-            </div>
-        </div>
-    </div>
-
-    <div class="card mb-4 border-primary shadow-sm" style="background-color: #f0f7ff;">
-        <div class="card-body py-3">
-            <div class="row align-items-center">
-                <div class="col-md-7">
-                    <h6 class="fw-bold mb-0">🎯 Presupuesto en Banco (Bs)</h6>
-                </div>
-                <div class="col-md-5 mt-2 mt-md-0">
-                    <input type="number" id="presupuesto_bs" class="form-control border-primary" placeholder="Monto total a usar" oninput="optimizarInversion()">
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="row g-3">
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm" style="border-top: 5px solid var(--accent-bdv);">
-                <div class="card-body">
-                    <label class="small fw-bold">Tasa BCV</label>
-                    <input type="number" id="tasa_bcv" class="form-control mb-3" value="515.00" oninput="calcular('bcv')">
-                    <label class="small fw-bold">Débito Banco ($)</label>
-                    <input type="number" id="bdv_usd" class="form-control" value="225.00" oninput="calcular('bdv')">
-                    <small class="text-muted d-block text-center mt-1" id="costo_bs_total">0 Bs</small>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm" style="border-top: 5px solid var(--accent-wally);">
-                <div class="card-body">
-                    <label class="small fw-bold">Neto Wally ($)</label>
-                    <input type="number" id="wally_usd" class="form-control mb-2" oninput="calcular('wally')">
-                    <div class="p-2 border rounded bg-light small text-center">
-                        Comisión: <strong>5.79%</strong>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm" style="border-top: 5px solid var(--accent-zinli);">
-                <div class="card-body">
-                    <label class="small fw-bold">Neto Zinli ($)</label>
-                    <input type="number" id="zinli_usd" class="form-control mb-2" oninput="calcular('zinli')">
-                    <div class="p-2 border rounded bg-light small text-center">
-                        Fee Recarga: <strong id="zinli_fee_display">8.13</strong> $
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row g-3 mt-1">
-        <div class="col-md-6">
-            <div class="card shadow-sm" style="border-top: 5px solid var(--accent-binance);">
-                <div class="card-body">
-                    <label class="small fw-bold">USDT Final (Binance)</label>
-                    <input type="number" id="binance_usdt" class="form-control" oninput="calcular('binance')">
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card shadow-sm" style="border-top: 5px solid var(--accent-retorno);">
-                <div class="card-body">
-                    <label class="small fw-bold">Tasa Venta P2P</label>
-                    <input type="number" id="tasa_p2p" class="form-control" value="625.00" oninput="calcular('p2p')">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="card mt-4 shadow-lg p-4">
-        <div id="status_light" class="semaforo mb-4"></div>
-        <div class="row text-center align-items-center">
-            <div class="col-md-4 border-end">
-                <small class="text-muted d-block fw-bold">GANANCIA</small>
-                <h2 class="fw-bold mb-0" id="res_ganancia">0 Bs</h2>
-                <span id="res_porcentaje" class="badge mt-1">0% ROI</span>
-            </div>
-            <div class="col-md-4 border-end">
-                <small class="text-muted d-block fw-bold">RETORNO TOTAL</small>
-                <h4 class="fw-bold mb-0" id="ret_final_bs">0.00 Bs</h4>
-            </div>
-            <div class="col-md-4">
-                <button class="btn btn-dark w-100 fw-bold py-3" onclick="guardarOperacion()">💾 GUARDAR</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="mt-4">
-        <div class="d-flex justify-content-between mb-2">
-            <h6 class="fw-bold">Historial del Día</h6>
-            <button class="btn btn-outline-danger btn-sm" onclick="limpiarHistorial()">Borrar</button>
-        </div>
-        <div class="card shadow-sm table-responsive">
-            <table class="table table-custom mb-0">
-                <thead class="table-dark">
-                    <tr><th>Hora</th><th>Inv. Bs</th><th>USDT</th><th>Ganancia</th><th>ROI</th></tr>
-                </thead>
-                <tbody id="lista_historial"></tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
 <script>
     const PCT_WALLY = 0.0579166; 
     const PCT_BINANCE = 0.0650832;
-    const PCT_ZINLI = 0.037487; // Ajustado para que 225 de 216.87 netos
+    const PCT_ZINLI = 0.037487; 
 
     let operaciones = JSON.parse(localStorage.getItem('ops_flowcalc_v4')) || [];
 
@@ -169,18 +10,21 @@
         document.body.setAttribute('data-bs-theme', current === 'dark' ? 'light' : 'dark');
     }
 
+    // Nueva lógica: Solo actualiza los campos que NO estás tocando
     function calcular(origen) {
         let bcv = parseFloat(document.getElementById('tasa_bcv').value) || 0;
         let p2p = parseFloat(document.getElementById('tasa_p2p').value) || 0;
+        
         let bdv_usd = parseFloat(document.getElementById('bdv_usd').value) || 0;
         let wally_usd = parseFloat(document.getElementById('wally_usd').value) || 0;
         let zinli_usd = parseFloat(document.getElementById('zinli_usd').value) || 0;
         let binance_usdt = parseFloat(document.getElementById('binance_usdt').value) || 0;
 
+        // Cálculos lógicos según el origen
         if (origen === 'bdv' || origen === 'bcv') {
             wally_usd = bdv_usd / (1 + PCT_WALLY);
             zinli_usd = bdv_usd / (1 + PCT_ZINLI);
-            binance_usdt = wally_usd * (1 - PCT_BINANCE); // Ejemplo base con Wally
+            binance_usdt = wally_usd * (1 - PCT_BINANCE);
         } else if (origen === 'wally') {
             bdv_usd = wally_usd * (1 + PCT_WALLY);
             zinli_usd = bdv_usd / (1 + PCT_ZINLI);
@@ -188,29 +32,44 @@
         } else if (origen === 'zinli') {
             bdv_usd = zinli_usd * (1 + PCT_ZINLI);
             wally_usd = bdv_usd / (1 + PCT_WALLY);
-            binance_usdt = zinli_usd * 0.98; // Ajustar según fee de salida de Zinli a Binance
+            binance_usdt = zinli_usd * 0.98; // Ajuste Zinli -> Binance
+        } else if (origen === 'binance') {
+            wally_usd = binance_usdt / (1 - PCT_BINANCE);
+            bdv_usd = wally_usd * (1 + PCT_WALLY);
+            zinli_usd = bdv_usd / (1 + PCT_ZINLI);
         }
 
-        document.getElementById('bdv_usd').value = bdv_usd.toFixed(2);
-        document.getElementById('wally_usd').value = wally_usd.toFixed(2);
-        document.getElementById('zinli_usd').value = zinli_usd.toFixed(2);
-        document.getElementById('binance_usdt').value = binance_usdt.toFixed(4);
+        // BLOQUE DE PROTECCIÓN: Solo actualiza si NO es el origen
+        if(origen !== 'bdv') document.getElementById('bdv_usd').value = bdv_usd.toFixed(2);
+        if(origen !== 'wally') document.getElementById('wally_usd').value = wally_usd.toFixed(2);
+        if(origen !== 'zinli') document.getElementById('zinli_usd').value = zinli_usd.toFixed(2);
+        if(origen !== 'binance') document.getElementById('binance_usdt').value = binance_usdt.toFixed(4);
+
+        // Actualización de etiquetas de texto (esto no afecta la escritura)
         document.getElementById('zinli_fee_display').innerText = (bdv_usd - zinli_usd).toFixed(2);
 
-        let total_inv_bs = (bdv_usd * bcv) * 1.005; // Incluyendo menudeo
+        let total_inv_bs = (bdv_usd * bcv) * 1.005;
         let total_ret_bs = binance_usdt * p2p;
         let ganancia = total_ret_bs - total_inv_bs;
         let roi = total_inv_bs > 0 ? (ganancia / total_inv_bs) * 100 : 0;
 
         document.getElementById('costo_bs_total').innerText = total_inv_bs.toLocaleString('es-VE') + " Bs";
-        document.getElementById('ret_final_bs').innerText = total_ret_bs.toLocaleString('es-VE') + " Bs";
-        document.getElementById('res_ganancia').innerText = ganancia.toLocaleString('es-VE') + " Bs";
-        document.getElementById('res_ganancia').style.color = ganancia >= 0 ? "#10b981" : "#ef4444";
+        document.getElementById('ret_final_bs').innerText = total_ret_bs.toLocaleString('es-VE', {minimumFractionDigits:2}) + " Bs";
+        
+        const resG = document.getElementById('res_ganancia');
+        resG.innerText = ganancia.toLocaleString('es-VE', {minimumFractionDigits:2}) + " Bs";
+        resG.style.color = ganancia >= 0 ? "#10b981" : "#ef4444";
+        
         document.getElementById('res_porcentaje').innerText = roi.toFixed(2) + "% ROI";
-
+        
         const light = document.getElementById('status_light');
         light.className = "semaforo " + (roi >= 2 ? "semaforo-verde" : (roi >= 0.5 ? "semaforo-amarillo" : "semaforo-rojo"));
     }
+
+    // Auto-seleccionar al hacer clic (Comodidad Pro)
+    document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('focus', (e) => e.target.select());
+    });
 
     function optimizarInversion() {
         let pres = parseFloat(document.getElementById('presupuesto_bs').value) || 0;
@@ -222,9 +81,13 @@
     }
 
     function guardarOperacion() {
-        let inv = (parseFloat(document.getElementById('bdv_usd').value) * parseFloat(document.getElementById('tasa_bcv').value) * 1.005);
+        let bdv = parseFloat(document.getElementById('bdv_usd').value);
+        let bcv = parseFloat(document.getElementById('tasa_bcv').value);
+        let inv = bdv * bcv * 1.005;
         let usdt = document.getElementById('binance_usdt').value;
-        let gan = (usdt * document.getElementById('tasa_p2p').value) - inv;
+        let p2p = document.getElementById('tasa_p2p').value;
+        let gan = (usdt * p2p) - inv;
+
         operaciones.unshift({
             Hora: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
             Inv: inv.toFixed(2),
@@ -242,7 +105,7 @@
         let total = 0;
         operaciones.forEach(op => {
             total += parseFloat(op.Gan);
-            lista.innerHTML += `<tr><td>${op.Hora}</td><td>${op.Inv}</td><td>${op.Usdt}</td><td class="fw-bold">${op.Gan}</td><td>${op.Roi}</td></tr>`;
+            lista.innerHTML += `<tr><td>${op.Hora}</td><td>${parseFloat(op.Inv).toLocaleString('es-VE')}</td><td>${op.Usdt}</td><td class="fw-bold">${parseFloat(op.Gan).toLocaleString('es-VE')}</td><td><span class="badge ${parseFloat(op.Roi)>=0?'bg-success':'bg-danger'}">${op.Roi}</span></td></tr>`;
         });
         document.getElementById('ganancia_total_dia').innerText = total.toLocaleString('es-VE') + " Bs";
     }
@@ -252,5 +115,3 @@
     actualizarTabla();
     calcular('bdv');
 </script>
-</body>
-</html>

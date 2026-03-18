@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FlowCalc 5.2 | Comparador Real-Time</title>
+    <title>FlowCalc 5.3 | Auto-Select Fix</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
@@ -12,55 +12,44 @@
         :root {
             --bg-body: #f8fafc; --bg-card: #ffffff; --text-main: #0f172a;
             --accent-bdv: #ef4444; --accent-wally: #6366f1; --accent-zinli: #00d1b2;
-            --accent-binance: #f59e0b; --accent-retorno: #10b981; --border: #e2e8f0;
-        }
-        [data-bs-theme="dark"] {
-            --bg-body: #020617; --bg-card: #1e293b; --text-main: #f1f5f9; --border: #334155;
+            --accent-binance: #f59e0b; --border: #e2e8f0;
         }
         body { background-color: var(--bg-body); color: var(--text-main); font-family: 'Inter', sans-serif; padding: 10px; }
         .card { border-radius: 18px; border: 1px solid var(--border); background: var(--bg-card); margin-bottom: 10px; }
         .header-section { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: white; padding: 15px; border-radius: 20px; margin-bottom: 15px; }
-        .form-control { background-color: rgba(0,0,0,0.03); border: 2px solid var(--border); color: var(--text-main); border-radius: 12px; font-weight: 700; font-family: 'JetBrains+Mono', monospace; text-align: center; }
-        .form-control:focus { border-color: var(--accent-binance); box-shadow: none; }
+        .form-control { background-color: rgba(0,0,0,0.03); border: 2px solid var(--border); color: var(--text-main); border-radius: 12px; font-weight: 700; font-family: 'JetBrains+Mono', monospace; text-align: center; font-size: 1.1rem; }
+        .form-control:focus { border-color: var(--accent-binance); box-shadow: none; background: #fff; }
         .badge-fee { font-size: 0.65rem; padding: 3px 7px; border-radius: 6px; margin-top: 4px; display: inline-block; font-weight: 800; }
-        .highlight-val { color: var(--accent-bdv); font-weight: 800; }
     </style>
 </head>
-<body data-bs-theme="light">
+<body>
 
 <div class="container">
     <div class="header-section shadow-lg text-center">
-        <h4 class="fw-bold mb-0">📊 FlowCalc <span style="color: #38bdf8;">5.2</span></h4>
-        <small class="opacity-75">Comparativa Wally vs Zinli</small>
+        <h4 class="fw-bold mb-0">📊 FlowCalc <span style="color: #38bdf8;">5.3</span></h4>
+        <small class="opacity-75">Wally vs Zinli (Auto-Select ON)</small>
     </div>
 
     <div class="row g-2 mb-2">
         <div class="col-6">
             <div class="card p-2 text-center shadow-sm">
                 <label class="small fw-bold text-muted">Tasa BCV</label>
-                <input type="number" id="tasa_bcv" class="form-control" value="51.50" oninput="calcular('tasa')">
+                <input type="number" id="tasa_bcv" class="form-control" value="51.50" oninput="calcular('tasa')" onclick="this.select()">
             </div>
         </div>
         <div class="col-6">
             <div class="card p-2 text-center shadow-sm">
                 <label class="small fw-bold text-muted">Tasa P2P</label>
-                <input type="number" id="tasa_p2p" class="form-control" value="62.50" oninput="calcular('tasa')">
+                <input type="number" id="tasa_p2p" class="form-control" value="62.50" oninput="calcular('tasa')" onclick="this.select()">
             </div>
         </div>
     </div>
 
     <div class="card shadow-sm border-0" style="border-left: 6px solid var(--accent-bdv) !important;">
-        <div class="card-body py-2">
-            <div class="row align-items-center">
-                <div class="col-7">
-                    <label class="small fw-bold text-muted">DÉBITO TOTAL BANCO ($)</label>
-                    <input type="number" id="debito_usd" class="form-control border-danger" value="105.97" oninput="calcular('banco')">
-                </div>
-                <div class="col-5 text-end">
-                    <small class="text-muted d-block">Gasto en Bs</small>
-                    <h5 class="fw-bold mb-0 text-danger"><span id="costo_bs">0</span> Bs</h5>
-                </div>
-            </div>
+        <div class="card-body py-2 text-center">
+            <label class="small fw-bold text-muted">DÉBITO TOTAL BANCO ($)</label>
+            <input type="number" id="debito_usd" class="form-control border-danger mb-1" value="105.97" oninput="calcular('banco')" onclick="this.select()">
+            <small class="text-muted">Gasto: <span id="costo_bs" class="fw-bold text-danger">0</span> Bs</small>
         </div>
     </div>
 
@@ -68,17 +57,17 @@
         <div class="col-6">
             <div class="card shadow-sm border-0" style="border-top: 5px solid var(--accent-wally) !important;">
                 <div class="card-body p-2 text-center">
-                    <label class="fw-bold small mb-1">Neto Wally ($)</label>
-                    <input type="number" id="wally_neto" class="form-control mb-1" oninput="calcular('wally')">
-                    <span class="badge-fee bg-primary-subtle text-primary">Banco +5.97%</span>
+                    <label class="fw-bold small mb-1">Wally ($)</label>
+                    <input type="number" id="wally_neto" class="form-control mb-1" oninput="calcular('wally')" onclick="this.select()">
+                    <span class="badge-fee bg-primary-subtle text-primary">+5.97%</span>
                 </div>
             </div>
         </div>
         <div class="col-6">
             <div class="card shadow-sm border-0" style="border-top: 5px solid var(--accent-zinli) !important;">
                 <div class="card-body p-2 text-center">
-                    <label class="fw-bold small mb-1">Neto Zinli ($)</label>
-                    <input type="number" id="zinli_neto" class="form-control mb-1" oninput="calcular('zinli')">
+                    <label class="fw-bold small mb-1">Zinli ($)</label>
+                    <input type="number" id="zinli_neto" class="form-control mb-1" oninput="calcular('zinli')" onclick="this.select()">
                     <span class="badge-fee bg-info-subtle text-info">3.75% + 5.97%</span>
                 </div>
             </div>
@@ -86,28 +75,24 @@
     </div>
 
     <div class="card border-0 shadow-sm mt-2" style="border-left: 6px solid var(--accent-binance) !important;">
-        <div class="card-body py-2">
-            <div class="row align-items-center">
-                <div class="col-6">
-                    <label class="small fw-bold text-muted">USDT ESTIMADOS</label>
-                    <input type="number" id="binance_usdt" class="form-control border-warning" readonly>
-                </div>
-                <div class="col-6 text-end">
-                    <small class="text-muted d-block">Ganancia Estimada</small>
-                    <h5 class="fw-bold mb-0 text-success"><span id="res_ganancia">0</span> Bs</h5>
-                </div>
-            </div>
+        <div class="card-body py-2 text-center">
+            <label class="small fw-bold text-muted">USDT ESTIMADOS (98.5%)</label>
+            <input type="number" id="binance_usdt" class="form-control border-warning mb-1" readonly>
+            <h5 class="fw-bold mb-0 text-success">Ganancia: <span id="res_ganancia">0</span> Bs</h5>
         </div>
     </div>
 
-    <button class="btn btn-dark w-100 mt-3 py-3 fw-bold" onclick="guardar()">💾 REGISTRAR OPERACIÓN</button>
+    <button class="btn btn-dark w-100 mt-3 py-3 fw-bold shadow" onclick="guardar()">💾 REGISTRAR CIERRE</button>
 
     <div class="mt-4">
-        <h6 class="fw-bold small">📋 Cierres de hoy: <span id="ganancia_total_dia" class="text-success">0 Bs</span></h6>
+        <div class="d-flex justify-content-between mb-2">
+            <h6 class="fw-bold small">Cierres: <span id="ganancia_total_dia" class="text-success">0 Bs</span></h6>
+            <button class="btn btn-link btn-sm text-danger p-0" onclick="limpiarHistorial()">Borrar</button>
+        </div>
         <div class="table-responsive card shadow-sm">
             <table class="table table-sm text-center mb-0" style="font-size: 0.75rem;">
                 <thead class="table-dark">
-                    <tr><th>Hora</th><th>Invertido</th><th>Ganancia</th></tr>
+                    <tr><th>Hora</th><th>Inv. Bs</th><th>Gan. Bs</th></tr>
                 </thead>
                 <tbody id="lista_historial"></tbody>
             </table>
@@ -122,7 +107,6 @@
     function calcular(origen) {
         const bcv = parseFloat(document.getElementById('tasa_bcv').value) || 0;
         const p2p = parseFloat(document.getElementById('tasa_p2p').value) || 0;
-        
         let debito = parseFloat(document.getElementById('debito_usd').value) || 0;
         let wally = parseFloat(document.getElementById('wally_neto').value) || 0;
         let zinli = parseFloat(document.getElementById('zinli_neto').value) || 0;
@@ -130,25 +114,18 @@
         if (origen === 'wally') {
             debito = wally * (1 + FEE_BDV_INT);
         } else if (origen === 'zinli') {
-            let baseConZinli = zinli / (1 - FEE_ZINLI);
-            debito = baseConZinli * (1 + FEE_BDV_INT);
-        } else if (origen === 'banco' || origen === 'tasa') {
-            // No hacemos nada, usamos el valor de debito actual
+            debito = (zinli / (1 - FEE_ZINLI)) * (1 + FEE_BDV_INT);
         }
 
-        // SINCRONIZACIÓN: Ahora calculamos Wally y Zinli basándonos en ese DÉBITO
-        // 1. Lo que daría Wally con ese débito
+        // Sincronizar espejo
         wally = debito / (1 + FEE_BDV_INT);
-        // 2. Lo que daría Zinli con ese mismo débito
-        let baseZinli = debito / (1 + FEE_BDV_INT);
-        zinli = baseZinli * (1 - FEE_ZINLI);
+        zinli = wally * (1 - FEE_ZINLI);
 
-        // Actualizar inputs
-        document.getElementById('debito_usd').value = debito.toFixed(2);
-        document.getElementById('wally_neto').value = wally.toFixed(2);
-        document.getElementById('zinli_neto').value = zinli.toFixed(2);
+        // Actualizar UI
+        if(origen !== 'banco') document.getElementById('debito_usd').value = debito.toFixed(2);
+        if(origen !== 'wally') document.getElementById('wally_neto').value = wally.toFixed(2);
+        if(origen !== 'zinli') document.getElementById('zinli_neto').value = zinli.toFixed(2);
 
-        // Bolívares y Binance (Calculamos sobre Wally que da más usualmente)
         const cBs = debito * bcv;
         const usdt = wally * 0.985;
         const rBs = usdt * p2p;
@@ -157,15 +134,21 @@
         document.getElementById('binance_usdt').value = usdt.toFixed(2);
         document.getElementById('costo_bs').innerText = Math.floor(cBs).toLocaleString('es-VE');
         document.getElementById('res_ganancia').innerText = Math.floor(gan).toLocaleString('es-VE');
-        document.getElementById('res_ganancia').style.color = gan >= 0 ? "#10b981" : "#ef4444";
     }
 
-    let operaciones = JSON.parse(localStorage.getItem('ops_v52')) || [];
+    // Corregir problema de selección al tocar
+    document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('focus', function() {
+            setTimeout(() => { this.select(); }, 50);
+        });
+    });
+
+    let operaciones = JSON.parse(localStorage.getItem('ops_v53')) || [];
     function guardar() {
         const inv = document.getElementById('costo_bs').innerText;
         const gan = document.getElementById('res_ganancia').innerText;
         operaciones.unshift({ h: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), i: inv, g: gan });
-        localStorage.setItem('ops_v52', JSON.stringify(operaciones));
+        localStorage.setItem('ops_v53', JSON.stringify(operaciones));
         dibujarTabla();
     }
 
@@ -175,12 +158,13 @@
         let total = 0;
         operaciones.forEach(op => {
             total += parseInt(op.g.replace(/\./g, ''));
-            lista.innerHTML += `<tr><td>${op.h}</td><td>${op.i}</td><td class="fw-bold">${op.g}</td></tr>`;
+            lista.innerHTML += `<tr><td>${op.h}</td><td>${op.i}</td><td class="fw-bold text-success">${op.g}</td></tr>`;
         });
         document.getElementById('ganancia_total_dia').innerText = total.toLocaleString('es-VE') + " Bs";
     }
 
-    document.querySelectorAll('input').forEach(i => i.addEventListener('focus', e => e.target.select()));
+    function limpiarHistorial() { if(confirm("¿Borrar?")) { operaciones = []; localStorage.removeItem('ops_v53'); dibujarTabla(); } }
+    
     dibujarTabla();
     calcular('banco');
 </script>

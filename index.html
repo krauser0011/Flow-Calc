@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FlowCalc 6.5 | Flexible Edition</title>
+    <title>FlowCalc 6.6 | Binance Exact Fix</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@
         .card { border-radius: 20px; border: 1px solid var(--border); background: var(--bg-card); margin-bottom: 10px; padding: 12px; }
         .header-section { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: white; padding: 15px; border-radius: 20px; margin-bottom: 12px; }
         .form-control { background-color: rgba(0,0,0,0.03); border: 2px solid var(--border); color: var(--text-main); border-radius: 12px; font-weight: 700; font-family: 'JetBrains+Mono', monospace; text-align: center; }
-        .form-control:focus { border-color: var(--accent-wally); box-shadow: none; background: #fff; }
+        .form-control:focus { border-color: var(--accent-binance); box-shadow: none; background: #fff; }
         .label-title { font-size: 0.7rem; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 4px; display: block; }
     </style>
 </head>
@@ -26,39 +26,33 @@
 
 <div class="container">
     <div class="header-section shadow text-center">
-        <h4 class="fw-bold mb-0">📊 FlowCalc <span style="color: #6366f1;">6.5</span></h4>
-        <small class="opacity-75">Control de Comisión Variable</small>
+        <h4 class="fw-bold mb-0">📊 FlowCalc <span style="color: #f59e0b;">6.6</span></h4>
+        <small class="opacity-75">Target: $100 Banco → $93.50 Binance</small>
     </div>
 
     <div class="row g-2 mb-2">
-        <div class="col-4">
-            <div class="card p-2 text-center border-primary-subtle">
-                <span class="label-title text-primary">% Comisión</span>
-                <input type="number" id="fee_input" class="form-control form-control-sm" value="6.25" step="0.01" oninput="calcular('tasa')">
+        <div class="col-6">
+            <div class="card p-2 text-center shadow-sm">
+                <span class="label-title">Tasa BCV (Compra)</span>
+                <input type="number" id="tasa_bcv" class="form-control" value="51.50" oninput="calcular('tasa')">
             </div>
         </div>
-        <div class="col-4">
-            <div class="card p-2 text-center">
-                <span class="label-title">Tasa BCV</span>
-                <input type="number" id="tasa_bcv" class="form-control form-control-sm" value="51.50" oninput="calcular('tasa')">
-            </div>
-        </div>
-        <div class="col-4">
-            <div class="card p-2 text-center">
-                <span class="label-title">Venta P2P</span>
-                <input type="number" id="tasa_p2p" class="form-control form-control-sm" value="62.50" oninput="calcular('tasa')">
+        <div class="col-6">
+            <div class="card p-2 text-center shadow-sm">
+                <span class="label-title">Tasa P2P (Venta)</span>
+                <input type="number" id="tasa_p2p" class="form-control" value="62.50" oninput="calcular('tasa')">
             </div>
         </div>
     </div>
 
-    <div class="card shadow-sm" style="border-left: 8px solid var(--accent-bs);">
-        <span class="label-title text-success">Inversión en Bolívares (Bs)</span>
-        <input type="number" id="monto_bs" class="form-control mb-3" placeholder="0.00" oninput="calcular('bs')">
+    <div class="card shadow-sm" style="border-left: 8px solid var(--accent-bdv);">
+        <span class="label-title text-danger">Débito Total Banco ($)</span>
+        <input type="number" id="debito_usd" class="form-control mb-3" placeholder="0.00" oninput="calcular('banco')">
         
         <div class="row g-2">
             <div class="col-6">
-                <span class="label-title text-danger">Débito Banco ($)</span>
-                <input type="number" id="debito_usd" class="form-control" oninput="calcular('banco')">
+                <span class="label-title text-success">Inversión (Bs)</span>
+                <input type="number" id="monto_bs" class="form-control" oninput="calcular('bs')">
             </div>
             <div class="col-6">
                 <span class="label-title text-primary">Neto Wally ($)</span>
@@ -67,36 +61,33 @@
         </div>
     </div>
 
-    <div class="card border-0 shadow mt-2" style="background: #1e293b; color: white;">
-        <div class="row text-center">
+    <div class="card border-0 shadow mt-2" style="background: #1e293b; color: white; border-left: 8px solid var(--accent-binance) !important;">
+        <div class="row text-center py-1">
             <div class="col-6 border-end border-secondary">
-                <span class="label-title text-light opacity-50">Binance USDT</span>
-                <h4 class="fw-bold mb-0" id="binance_usdt_text" style="color: var(--accent-binance);">0.00</h4>
+                <span class="label-title text-warning" style="font-size: 0.6rem;">RECIBES EN BINANCE (USDT)</span>
+                <h4 class="fw-bold mb-0" id="binance_usdt_text" style="color: #fff;">0.00</h4>
             </div>
             <div class="col-6">
-                <span class="label-title text-light opacity-50">Ganancia Neta</span>
+                <span class="label-title text-success" style="font-size: 0.6rem;">GANANCIAS REALES (BS)</span>
                 <h4 class="fw-bold mb-0 text-success" id="res_ganancia">0 Bs</h4>
             </div>
         </div>
     </div>
 
-    <div class="row g-2 mt-2">
-        <div class="col-8">
-            <button class="btn btn-dark w-100 py-3 fw-bold" onclick="guardar()">💾 GUARDAR CIERRE</button>
-        </div>
-        <div class="col-4">
-            <button class="btn btn-outline-secondary w-100 py-3 fw-bold" onclick="location.reload()">🔄 RESET</button>
+    <div class="row g-2 mt-3">
+        <div class="col-12">
+            <button class="btn btn-dark w-100 py-3 fw-bold shadow" onclick="guardar()">💾 REGISTRAR OPERACIÓN</button>
         </div>
     </div>
 
     <div class="mt-4">
         <h6 class="fw-bold small d-flex justify-content-between">
-            CIERRES DE HOY <span>Total: <b id="ganancia_total_dia" class="text-success">0 Bs</b></span>
+            HISTORIAL DE HOY <span class="text-success" id="ganancia_total_dia">0 Bs</span>
         </h6>
         <div class="table-responsive card border-0 shadow-sm p-0">
             <table class="table table-sm text-center mb-0" style="font-size: 0.8rem;">
                 <thead class="table-dark">
-                    <tr><th>Hora</th><th>Inv. Bs</th><th>Gan. Bs</th></tr>
+                    <tr><th>Hora</th><th>Gasto Bs</th><th>Neto USDT</th><th>Gan. Bs</th></tr>
                 </thead>
                 <tbody id="lista_historial"></tbody>
             </table>
@@ -105,31 +96,39 @@
 </div>
 
 <script>
+    // Según tu dato: $100 gastados = $93.50 en Binance.
+    // Eso es una pérdida/comisión total del 6.5% desde el débito del banco hasta Binance.
+    const FACTOR_BANCO_A_BINANCE = 0.935;
+    // Comisión de recarga Wally (estimada en 3.7% sobre el neto)
+    const FEE_WALLY_RECARGA = 1.037; 
+
     function calcular(origen) {
         const bcv = parseFloat(document.getElementById('tasa_bcv').value) || 0;
         const p2p = parseFloat(document.getElementById('tasa_p2p').value) || 0;
-        const fee = (parseFloat(document.getElementById('fee_input').value) || 0) / 100;
         
         let bs = parseFloat(document.getElementById('monto_bs').value) || 0;
         let debito = parseFloat(document.getElementById('debito_usd').value) || 0;
         let wally = parseFloat(document.getElementById('wally_neto').value) || 0;
 
-        if (origen === 'bs' || origen === 'tasa') {
-            debito = bs / bcv;
-            wally = debito / (1 + fee);
-        } else if (origen === 'banco') {
+        if (origen === 'banco' || origen === 'tasa') {
             bs = debito * bcv;
-            wally = debito / (1 + fee);
+            wally = debito / FEE_WALLY_RECARGA;
+        } else if (origen === 'bs') {
+            debito = bs / bcv;
+            wally = debito / FEE_WALLY_RECARGA;
         } else if (origen === 'wally') {
-            debito = wally * (1 + fee);
+            debito = wally * FEE_WALLY_RECARGA;
             bs = debito * bcv;
         }
 
+        // Actualizar los cuadros de texto
         if(origen !== 'bs') document.getElementById('monto_bs').value = bs > 0 ? bs.toFixed(2) : "";
         if(origen !== 'banco') document.getElementById('debito_usd').value = debito > 0 ? debito.toFixed(2) : "";
         if(origen !== 'wally') document.getElementById('wally_neto').value = wally > 0 ? wally.toFixed(2) : "";
 
-        const usdt = wally * 0.985; 
+        // LÓGICA DE BINANCE SOLICITADA:
+        // Si debito es 100, usdt debe ser 93.50
+        const usdt = debito * FACTOR_BANCO_A_BINANCE;
         const rBs = usdt * p2p;
         const gan = rBs - bs;
 
@@ -142,13 +141,19 @@
         input.addEventListener('focus', function() { setTimeout(() => { this.select(); }, 50); });
     });
 
-    let operaciones = JSON.parse(localStorage.getItem('ops_v65')) || [];
+    let operaciones = JSON.parse(localStorage.getItem('ops_v66')) || [];
     function guardar() {
         const inv = document.getElementById('monto_bs').value || "0";
+        const usdt = document.getElementById('binance_usdt_text').innerText;
         const gan = document.getElementById('res_ganancia').innerText;
         if(inv === "0") return;
-        operaciones.unshift({ h: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), i: inv, g: gan });
-        localStorage.setItem('ops_v65', JSON.stringify(operaciones));
+        operaciones.unshift({ 
+            h: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), 
+            i: inv, 
+            u: usdt,
+            g: gan 
+        });
+        localStorage.setItem('ops_v66', JSON.stringify(operaciones));
         dibujarTabla();
     }
 
@@ -158,7 +163,7 @@
         let total = 0;
         operaciones.forEach(op => {
             total += parseInt(op.g.replace(/\./g, ''));
-            lista.innerHTML += `<tr><td>${op.h}</td><td>${parseFloat(op.i).toLocaleString('es-VE')}</td><td class="fw-bold">${op.g}</td></tr>`;
+            lista.innerHTML += `<tr><td>${op.h}</td><td>${parseFloat(op.i).toLocaleString('es-VE')}</td><td>${op.u}</td><td class="fw-bold text-success">${op.g}</td></tr>`;
         });
         document.getElementById('ganancia_total_dia').innerText = total.toLocaleString('es-VE') + " Bs";
     }

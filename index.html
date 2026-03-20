@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consola de Arbitraje Pro</title>
+    <title>Consola de Arbitraje Unificada</title>
     <style>
         :root {
-            --bg: #f0f2f5;
+            --bg: #f4f7f9;
             --card: #ffffff;
-            --text: #1a1a1a;
+            --text-main: #1e293b;
             --text-sub: #64748b;
             --border: #e2e8f0;
-            --primary: #2563eb;
+            --accent: #2563eb;
             --success: #10b981;
             --danger: #ef4444;
             --input-bg: #f8fafc;
@@ -21,31 +21,31 @@
         [data-theme="dark"] {
             --bg: #0f172a;
             --card: #1e293b;
-            --text: #f8fafc;
+            --text-main: #f8fafc;
             --text-sub: #94a3b8;
             --border: #334155;
-            --primary: #3b82f6;
             --input-bg: #0f172a;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; transition: all 0.2s ease; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
 
         body {
             background-color: var(--bg);
-            color: var(--text);
+            color: var(--text-main);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
         }
 
-        .main-card {
+        .container {
             background-color: var(--card);
             width: 100%;
-            max-width: 500px;
-            border-radius: 24px;
-            padding: 24px;
+            max-width: 480px;
+            border-radius: 28px;
+            padding: 30px;
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
         }
@@ -54,10 +54,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
+            margin-bottom: 25px;
         }
 
-        .header h1 { font-size: 1.2rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .header h1 { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.5px; }
 
         .theme-toggle {
             background: var(--input-bg);
@@ -65,25 +65,25 @@
             padding: 8px;
             border-radius: 12px;
             cursor: pointer;
-            color: var(--text);
+            color: var(--text-main);
         }
 
-        /* Grid de Entradas */
-        .input-grid {
+        /* Sección de Entradas */
+        .grid-inputs {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 15px;
             margin-bottom: 20px;
         }
 
-        .field {
+        .input-box {
             background: var(--input-bg);
-            padding: 12px;
+            padding: 12px 16px;
             border-radius: 16px;
             border: 1px solid var(--border);
         }
 
-        .field label {
+        .input-box label {
             display: block;
             font-size: 0.7rem;
             font-weight: 700;
@@ -92,126 +92,126 @@
             text-transform: uppercase;
         }
 
-        .field input {
+        .input-box input {
             width: 100%;
             background: transparent;
             border: none;
             outline: none;
-            color: var(--text);
-            font-size: 1.1rem;
+            color: var(--text-main);
+            font-size: 1.2rem;
             font-weight: 600;
         }
 
-        /* El Flujo Visual */
-        .flow-container {
+        .full-width { grid-column: span 2; border: 2px solid var(--accent); }
+
+        /* Flujo de Resultados */
+        .flow {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
+            margin: 20px 0;
         }
 
         .step {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding: 14px 18px;
+            align-items: center;
+            padding: 14px 20px;
             background: var(--input-bg);
             border-radius: 16px;
-            border-left: 4px solid var(--primary);
+            border-left: 4px solid var(--accent);
         }
 
         .step-info span { display: block; }
-        .step-label { font-size: 0.75rem; color: var(--text-sub); font-weight: 500; }
-        .step-value { font-size: 1rem; font-weight: 700; }
+        .label { font-size: 0.75rem; color: var(--text-sub); font-weight: 600; }
+        .val { font-size: 1.05rem; font-weight: 700; }
 
         /* Resultado Final */
         .summary {
-            margin-top: 20px;
-            padding: 20px;
+            padding: 24px;
             border-radius: 20px;
             text-align: center;
-            background: var(--primary);
+            background: var(--accent);
             color: white;
+            margin-top: 10px;
         }
 
         .summary.profit { background: var(--success); }
         .summary.loss { background: var(--danger); }
 
-        .summary-label { font-size: 0.8rem; font-weight: 600; opacity: 0.9; text-transform: uppercase; }
-        .summary-value { font-size: 1.8rem; font-weight: 800; margin: 4px 0; }
-        .summary-percent { font-size: 0.9rem; font-weight: 700; background: rgba(0,0,0,0.1); padding: 4px 12px; border-radius: 20px; display: inline-block; }
-
-        .divider { height: 1px; background: var(--border); margin: 15px 0; }
+        .summary-label { font-size: 0.85rem; font-weight: 600; opacity: 0.9; }
+        .summary-val { font-size: 2.2rem; font-weight: 800; margin: 5px 0; }
+        .summary-pct { font-size: 1rem; font-weight: 700; background: rgba(0,0,0,0.15); padding: 4px 15px; border-radius: 50px; display: inline-block; }
 
     </style>
 </head>
 <body>
 
-<div class="main-card">
+<div class="container">
     <div class="header">
-        <h1>Arbitraje <span style="color:var(--primary)">Dual</span></h1>
+        <h1>Arbitraje <span style="color:var(--accent)">Full-Flow</span></h1>
         <button class="theme-toggle" onclick="toggleTheme()" id="tBtn">🌙</button>
     </div>
 
-    <div class="input-grid">
-        <div class="field">
-            <label>Tasa BDV (Bs)</label>
+    <div class="grid-inputs">
+        <div class="input-box">
+            <label>Tasa Compra BDV</label>
             <input type="number" id="tasaBdv" placeholder="0.00" step="0.01">
         </div>
-        <div class="field">
-            <label>Tasa P2P (Bs)</label>
+        <div class="input-box">
+            <label>Tasa Venta P2P</label>
             <input type="number" id="tasaP2p" placeholder="0.00" step="0.01">
         </div>
+        <div class="input-box full-width">
+            <label>Inversión Base (Bolívares)</label>
+            <input type="number" id="montoBs" placeholder="¿Cuánto vas a usar?" step="0.01">
+        </div>
     </div>
 
-    <div class="divider"></div>
-
-    <div class="field" style="margin-bottom: 20px; border-left: 4px solid var(--primary);">
-        <label>Base BDV: Bolívares Disponibles</label>
-        <input type="number" id="montoBs" placeholder="Cantidad en Bolívares" step="0.01">
-    </div>
-
-    <div class="flow-container">
+    <div class="flow">
         <div class="step">
             <div class="step-info">
-                <span class="step-label">1. USD Comprados en BDV</span>
-                <span class="step-value" id="resUsdBdv">0.00 $</span>
+                <span class="label">1. USD en Cuenta Bancaria</span>
+                <span class="val" id="resUsdBdv">0.00 $</span>
             </div>
-            <div style="font-size: 0.7rem; color: var(--text-sub);">Inversión Neta</div>
         </div>
 
-        <div class="step" style="border-left-color: #00D1A1;">
+        <div class="step" style="border-left-color: #8b5cf6;">
             <div class="step-info">
-                <span class="step-label">2. Recibido en Wally</span>
-                <span class="step-value" id="resWally">0.00 $</span>
+                <span class="label">2. Saldo Neto en Wally</span>
+                <span class="val" id="resWally">0.00 $</span>
             </div>
-            <div style="font-size: 0.7rem; color: var(--text-sub);">-6.25% Comis.</div>
+            <span style="font-size: 0.7rem; color: var(--text-sub);">-6.25%</span>
         </div>
 
-        <div class="step" style="border-left-color: #F3BA2F;">
+        <div class="step" style="border-left-color: #f59e0b;">
             <div class="step-info">
-                <span class="step-label">3. Recibido en Binance</span>
-                <span class="step-value" id="resBinance">0.0000 USDT</span>
+                <span class="label">3. USDT en Binance</span>
+                <span class="val" id="resBinance">0.0000 USDT</span>
             </div>
-            <div style="font-size: 0.7rem; color: var(--text-sub);">Ruta Final</div>
         </div>
     </div>
 
     <div class="summary" id="cajaNeto">
-        <div class="summary-label" id="labelNeto">Retorno del Ciclo</div>
-        <div class="summary-value" id="resNeto">0.00 Bs</div>
-        <div class="summary-percent" id="resPorcentaje">0.00%</div>
+        <div class="summary-label" id="labelNeto">Ganancia Estimada</div>
+        <div class="summary-val" id="resNeto">0.00 Bs</div>
+        <div class="summary-pct" id="resPorcentaje">0.00%</div>
     </div>
 </div>
 
 <script>
-    const inputs = ['tasaBdv', 'tasaP2p', 'montoBs'];
+    const ids = ['tasaBdv', 'tasaP2p', 'montoBs'];
     
-    // Cargar datos previos
-    inputs.forEach(id => {
-        const saved = localStorage.getItem(id);
-        if(saved) document.getElementById(id).value = saved;
-        document.getElementById(id).addEventListener('input', calcular);
-    });
+    // Al cargar: recuperar datos y aplicar tema
+    window.onload = () => {
+        ids.forEach(id => {
+            const val = localStorage.getItem(id);
+            if(val) document.getElementById(id).value = val;
+            document.getElementById(id).addEventListener('input', calcular);
+        });
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) toggleTheme();
+        calcular();
+    };
 
     function toggleTheme() {
         const body = document.body;
@@ -225,8 +225,8 @@
         }
     }
 
-    function format(num, dec = 2) {
-        return num.toLocaleString('en-US', {minimumFractionDigits: dec, maximumFractionDigits: dec});
+    function fmt(n, d = 2) {
+        return n.toLocaleString('en-US', {minimumFractionDigits: d, maximumFractionDigits: d});
     }
 
     function calcular() {
@@ -234,46 +234,49 @@
         const tP2p = parseFloat(document.getElementById('tasaP2p').value) || 0;
         const mBs = parseFloat(document.getElementById('montoBs').value) || 0;
 
-        // Guardar progreso
-        inputs.forEach(id => localStorage.setItem(id, document.getElementById(id).value));
+        // Persistencia
+        ids.forEach(id => localStorage.setItem(id, document.getElementById(id).value));
 
-        const COMISION_FIX = 0.0625; // 6.25%
-        const FACTOR_WALLY_BINANCE = 0.935031;
+        // Constantes del proceso
+        const COMISION_BANCO = 0.0625; // 6.25%
+        const FACTOR_BINANCE = 0.935031;
 
-        // 1. ¿Cuántos USD compro en el banco con mis Bs?
-        const usdBdv = tBdv > 0 ? mBs / tBdv : 0;
+        // Lógica de Flujo
+        // 1. Dólares que el banco te otorga por esos Bs
+        const usdBanco = tBdv > 0 ? mBs / tBdv : 0;
 
-        // 2. ¿Cuánto llega a Wally? 
-        // Lógica: Si el banco me quita 6.25% del total, recibo el resto
-        const wallyUsd = usdBdv / (1 + COMISION_FIX);
+        // 2. Dólares que realmente caen en Wally (descontando la comisión que el banco suma al precio)
+        const usdWally = usdBanco / (1 + COMISION_BANCO);
 
-        // 3. ¿Cuánto llega a Binance?
-        const binanceUsdt = wallyUsd * FACTOR_WALLY_BINANCE;
+        // 3. USDT que recibes tras el cambio interno
+        const usdtBinance = usdWally * FACTOR_BINANCE;
 
-        // 4. Retorno final al vender en P2P
-        const retornoBs = binanceUsdt * tP2p;
+        // 4. Retorno final en Bs al vender en P2P
+        const retornoBs = usdtBinance * tP2p;
         const netoBs = retornoBs - mBs;
-        const porcentaje = mBs > 0 ? (netoBs / mBs) * 100 : 0;
+        const pct = mBs > 0 ? (netoBs / mBs) * 100 : 0;
 
-        // Actualizar UI
-        document.getElementById('resUsdBdv').innerText = format(usdBdv) + ' $';
-        document.getElementById('resWally').innerText = format(wallyUsd) + ' $';
-        document.getElementById('resBinance').innerText = format(binanceUsdt, 4) + ' USDT';
-        document.getElementById('resNeto').innerText = format(netoBs) + ' Bs';
-        document.getElementById('resPorcentaje').innerText = (netoBs > 0 ? '+' : '') + format(porcentaje) + '%';
+        // Actualizar Interfaz
+        document.getElementById('resUsdBdv').innerText = fmt(usdBanco) + ' $';
+        document.getElementById('resWally').innerText = fmt(usdWally) + ' $';
+        document.getElementById('resBinance').innerText = fmt(usdtBinance, 4) + ' USDT';
+        document.getElementById('resNeto').innerText = (netoBs >= 0 ? '+ ' : '') + fmt(netoBs) + ' Bs';
+        document.getElementById('resPorcentaje').innerText = (netoBs >= 0 ? '+' : '') + fmt(pct) + '%';
 
-        // Colores de rentabilidad
         const caja = document.getElementById('cajaNeto');
+        const label = document.getElementById('labelNeto');
+        
+        caja.className = 'summary';
         if (mBs > 0) {
-            if (netoBs > 0) { caja.className = 'summary profit'; document.getElementById('labelNeto').innerText = 'Ganancia Neta'; }
-            else { caja.className = 'summary loss'; document.getElementById('labelNeto').innerText = 'Pérdida Neta'; }
-        } else {
-            caja.className = 'summary';
+            if (netoBs > 0) {
+                caja.classList.add('profit');
+                label.innerText = 'Ganancia Neta';
+            } else {
+                caja.classList.add('loss');
+                label.innerText = 'Pérdida Neta';
+            }
         }
     }
-
-    // Ejecutar al cargar
-    calcular();
 </script>
 
 </body>

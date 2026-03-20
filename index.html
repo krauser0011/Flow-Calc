@@ -3,281 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consola de Arbitraje Total</title>
+    <title>Arbitraje Master Console v3.0</title>
     <style>
         :root {
-            --bg: #f8fafc;
-            --card: #ffffff;
-            --text: #0f172a;
-            --text-sub: #64748b;
-            --border: #e2e8f0;
-            --primary: #2563eb;
-            --success: #10b981;
-            --danger: #ef4444;
-            --input-focus: #dbeafe;
+            --bg: #f0f2f5; --card: #ffffff; --text: #1a1a1a; --primary: #2563eb;
+            --success: #10b981; --danger: #ef4444; --border: #e2e8f0; --accent: #8b5cf6;
         }
-
         [data-theme="dark"] {
-            --bg: #020617;
-            --card: #1e293b;
-            --text: #f1f5f9;
-            --text-sub: #94a3b8;
-            --border: #334155;
-            --input-focus: #1e3a8a;
+            --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --border: #334155;
         }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: var(--text); padding: 15px; display: flex; flex-direction: column; align-items: center; }
+        .app { width: 100%; max-width: 480px; background: var(--card); padding: 25px; border-radius: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid var(--border); margin-bottom: 20px; }
+        
+        .section-title { font-size: 0.7rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; margin: 20px 0 10px 0; text-transform: uppercase; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
+        .section-title:first-of-type { margin-top: 0; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .input-group { background: var(--bg); padding: 10px; border-radius: 12px; border: 1px solid var(--border); }
+        .input-group label { display: block; font-size: 0.6rem; font-weight: 700; opacity: 0.7; margin-bottom: 3px; }
+        .input-group input { width: 100%; background: transparent; border: none; outline: none; color: var(--text); font-size: 1.1rem; font-weight: 700; }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif; }
+        .step-box { margin-bottom: 8px; padding: 12px; border-radius: 15px; background: var(--bg); border-left: 5px solid var(--primary); display: flex; justify-content: space-between; align-items: center; }
+        .step-box input { background: transparent; border: none; outline: none; color: var(--text); font-size: 1.2rem; font-weight: 800; width: 60%; text-align: right; }
+        
+        .break-even { background: #fffbeb; border: 1px solid #fef3c7; padding: 10px; border-radius: 12px; margin: 15px 0; text-align: center; color: #92400e; font-weight: 700; font-size: 0.85rem; }
+        [data-theme="dark"] .break-even { background: #451a03; color: #fcd34d; border: none; }
 
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 15px;
-        }
+        .total { padding: 20px; border-radius: 18px; text-align: center; color: white; background: var(--primary); }
+        .total.profit { background: var(--success); }
+        .total.loss { background: var(--danger); }
+        
+        .btn-action { width: 100%; padding: 14px; margin-top: 10px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-save { background: var(--primary); color: white; }
+        .btn-download { background: var(--text); color: var(--card); margin-top: 5px; font-size: 0.8rem; }
+        
+        /* Tabla de Historial */
+        .history-container { width: 100%; max-width: 480px; background: var(--card); border-radius: 20px; padding: 15px; border: 1px solid var(--border); overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+        th { text-align: left; padding: 10px; border-bottom: 2px solid var(--border); color: var(--primary); }
+        td { padding: 10px; border-bottom: 1px solid var(--border); }
 
-        .main-container {
-            background-color: var(--card);
-            width: 100%;
-            max-width: 450px;
-            border-radius: 24px;
-            padding: 24px;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
-            border: 1px solid var(--border);
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .header h1 { font-size: 1.1rem; font-weight: 800; text-transform: uppercase; color: var(--primary); }
-
-        .rates-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 2px dashed var(--border);
-        }
-
-        .input-group {
-            background: var(--bg);
-            padding: 10px 14px;
-            border-radius: 16px;
-            border: 1px solid var(--border);
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 0.65rem;
-            font-weight: 800;
-            color: var(--text-sub);
-            margin-bottom: 4px;
-            text-transform: uppercase;
-        }
-
-        .input-group input {
-            width: 100%;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: var(--text);
-            font-size: 1.1rem;
-            font-weight: 700;
-        }
-
-        .flow-title {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--text-sub);
-            margin-bottom: 12px;
-            text-align: center;
-        }
-
-        .step-card {
-            position: relative;
-            background: var(--bg);
-            margin-bottom: 10px;
-            padding: 14px;
-            border-radius: 18px;
-            border: 1px solid var(--border);
-            transition: all 0.2s ease;
-        }
-
-        .step-card:focus-within {
-            border-color: var(--primary);
-            background: var(--input-focus);
-            transform: scale(1.02);
-        }
-
-        .step-card label {
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: var(--text-sub);
-        }
-
-        .step-card input {
-            width: 100%;
-            background: transparent;
-            border: none;
-            outline: none;
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: var(--text);
-            margin-top: 2px;
-        }
-
-        .badge {
-            position: absolute;
-            right: 14px;
-            top: 14px;
-            font-size: 0.6rem;
-            padding: 2px 8px;
-            border-radius: 8px;
-            background: var(--border);
-            font-weight: 700;
-        }
-
-        .result-box {
-            margin-top: 15px;
-            padding: 20px;
-            border-radius: 20px;
-            text-align: center;
-            background: var(--primary);
-            color: white;
-        }
-
-        .profit { background: var(--success); }
-        .loss { background: var(--danger); }
-
-        .result-val { font-size: 1.8rem; font-weight: 900; }
-        .result-pct { font-size: 0.9rem; font-weight: 700; opacity: 0.9; }
-
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        /* Proyección */
+        .proyeccion-card { background: var(--accent); color: white; padding: 15px; border-radius: 15px; margin-top: 10px; text-align: center; }
     </style>
 </head>
 <body>
 
-<div class="main-container">
-    <div class="header">
-        <h1>Arbitraje Interconectado</h1>
-        <button onclick="document.body.getAttribute('data-theme')=='dark'?document.body.removeAttribute('data-theme'):document.body.setAttribute('data-theme','dark')" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">🌓</button>
+<div class="app">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <h2 style="font-size:1rem; font-weight: 900;">MASTER CONSOLE</h2>
+        <button onclick="document.body.toggleAttribute('data-theme')" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">🌓</button>
     </div>
 
-    <div class="rates-grid">
+    <p class="section-title">Ajustes de Mercado</p>
+    <div class="grid">
         <div class="input-group">
-            <label>BCV / Tasa Banco</label>
-            <input type="number" id="tasaBdv" placeholder="0.00" oninput="recalc('ves')">
+            <label>Tasa Compra (Banco)</label>
+            <input type="number" id="tasaBdv" value="0.00" oninput="recalc('ves')">
         </div>
         <div class="input-group">
-            <label>Tasa P2P Binance</label>
-            <input type="number" id="tasaP2p" placeholder="0.00" oninput="recalc('ves')">
+            <label>Tasa Venta (P2P)</label>
+            <input type="number" id="tasaP2p" value="0.00" oninput="recalc('ves')">
+        </div>
+        <div class="input-group">
+            <label>Comisión Banco (%)</label>
+            <input type="number" id="pComision" value="6.25" step="0.01" oninput="recalc('ves')">
+        </div>
+        <div class="input-group">
+            <label>Factor Wally-Bin</label>
+            <input type="number" id="pFactor" value="0.9350" step="0.0001" oninput="recalc('ves')">
         </div>
     </div>
 
-    <p class="flow-title">FLUJO DE DINERO (EDITA CUALQUIER CAMPO)</p>
+    <p class="section-title">Flujo de Capital</p>
+    <div class="step-box" style="border-color: #64748b;"><label>VES</label><input type="number" id="valVes" oninput="recalc('ves')"></div>
+    <div class="step-box" style="border-color: #2563eb;"><label>USD BANCO</label><input type="number" id="valBank" oninput="recalc('bank')"></div>
+    <div class="step-box" style="border-color: #8b5cf6;"><label>WALLY NETO</label><input type="number" id="valWally" oninput="recalc('wally')"></div>
+    <div class="step-box" style="border-color: #f59e0b;"><label>BINANCE</label><input type="number" id="valBinance" oninput="recalc('binance')"></div>
 
-    <div class="step-card" style="border-left: 5px solid var(--text-sub);">
-        <label>Base Bolívares (VES)</label>
-        <input type="number" id="valVes" placeholder="0.00" oninput="recalc('ves')">
-        <span class="badge">INVERSIÓN</span>
+    <div class="break-even" id="breakEven">Mínimo para no perder: 0.00 Bs</div>
+
+    <div class="total" id="caja">
+        <div style="font-size:0.7rem; opacity:0.9; text-transform:uppercase; font-weight:700;">Resultado Neto</div>
+        <div id="resGanancia" style="font-size:1.8rem; font-weight:900;">0.00 Bs</div>
+        <div id="resPct" style="font-size:0.9rem; font-weight:700;">0.00%</div>
     </div>
 
-    <div class="step-card" style="border-left: 5px solid var(--primary);">
-        <label>USD en Cuenta (Gross)</label>
-        <input type="number" id="valBank" placeholder="0.00" oninput="recalc('bank')">
-        <span class="badge">BANCO</span>
+    <p class="section-title">Proyección Multi-Ciclo</p>
+    <div class="input-group" style="margin-bottom: 10px;">
+        <label>Número de Vueltas (Ciclos)</label>
+        <input type="number" id="numCiclos" value="5" oninput="recalc('ves')">
+    </div>
+    <div class="proyeccion-card">
+        <div style="font-size: 0.65rem; font-weight: 700;">CAPITAL ESTIMADO TRAS CICLOS</div>
+        <div id="resProyeccion" style="font-size: 1.4rem; font-weight: 900;">0.00 Bs</div>
     </div>
 
-    <div class="step-card" style="border-left: 5px solid #8b5cf6;">
-        <label>Saldo Wally (Neto)</label>
-        <input type="number" id="valWally" placeholder="0.00" oninput="recalc('wally')">
-        <span class="badge" style="color:#8b5cf6">WALLY</span>
-    </div>
+    <button class="btn-action btn-save" onclick="saveToHistory()">GUARDAR OPERACIÓN</button>
+</div>
 
-    <div class="step-card" style="border-left: 5px solid #f59e0b;">
-        <label>USDT en Binance</label>
-        <input type="number" id="valBinance" placeholder="0.0000" oninput="recalc('binance')">
-        <span class="badge" style="color:#f59e0b">BINANCE</span>
+<div class="history-container">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <p class="section-title" style="border:none; margin:0;">Historial Reciente</p>
+        <button onclick="exportCSV()" class="btn-action btn-download" style="width:auto; margin:0; padding:5px 10px;">Excel (CSV)</button>
     </div>
-
-    <div class="result-box" id="cajaResultado">
-        <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Retorno Neto Estimado</div>
-        <div class="result-val" id="resGanancia">0.00 Bs</div>
-        <div class="result-pct" id="resPct">0.00%</div>
-    </div>
+    <table id="historyTable">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Inversión</th>
+                <th>USDT</th>
+                <th>Ganancia</th>
+            </tr>
+        </thead>
+        <tbody id="historyBody"></tbody>
+    </table>
 </div>
 
 <script>
-    const COMISION_BANCO = 0.0625; // 6.25%
-    const FACTOR_WALLY_BINANCE = 0.935031;
+    let history = JSON.parse(localStorage.getItem('arb_history')) || [];
 
-    // Cargar tasas al inicio
-    window.onload = () => {
-        if(localStorage.getItem('tBdv')) document.getElementById('tasaBdv').value = localStorage.getItem('tBdv');
-        if(localStorage.getItem('tP2p')) document.getElementById('tasaP2p').value = localStorage.getItem('tP2p');
-    };
-
-    function recalc(source) {
+    function recalc(src) {
+        const pCom = (parseFloat(document.getElementById('pComision').value) || 0) / 100;
+        const pFac = parseFloat(document.getElementById('pFactor').value) || 0;
         const tBdv = parseFloat(document.getElementById('tasaBdv').value) || 0;
         const tP2p = parseFloat(document.getElementById('tasaP2p').value) || 0;
-        
-        // Guardar tasas
-        localStorage.setItem('tBdv', tBdv);
-        localStorage.setItem('tP2p', tP2p);
+        const ciclos = parseInt(document.getElementById('numCiclos').value) || 0;
 
-        let ves = 0, bank = 0, wally = 0, binance = 0;
+        let ves = 0, bank = 0, wally = 0, bin = 0;
 
-        if (source === 'ves') {
+        if(src === 'ves') {
             ves = parseFloat(document.getElementById('valVes').value) || 0;
             bank = tBdv > 0 ? ves / tBdv : 0;
-            wally = bank / (1 + COMISION_BANCO);
-            binance = wally * FACTOR_WALLY_BINANCE;
-        } 
-        else if (source === 'bank') {
+            wally = bank / (1 + pCom);
+            bin = wally * pFac;
+        } else if(src === 'bank') {
             bank = parseFloat(document.getElementById('valBank').value) || 0;
             ves = bank * tBdv;
-            wally = bank / (1 + COMISION_BANCO);
-            binance = wally * FACTOR_WALLY_BINANCE;
-        } 
-        else if (source === 'wally') {
+            wally = bank / (1 + pCom);
+            bin = wally * pFac;
+        } else if(src === 'wally') {
             wally = parseFloat(document.getElementById('valWally').value) || 0;
-            bank = wally * (1 + COMISION_BANCO);
+            bank = wally * (1 + pCom);
             ves = bank * tBdv;
-            binance = wally * FACTOR_WALLY_BINANCE;
-        } 
-        else if (source === 'binance') {
-            binance = parseFloat(document.getElementById('valBinance').value) || 0;
-            wally = binance / FACTOR_WALLY_BINANCE;
-            bank = wally * (1 + COMISION_BANCO);
+            bin = wally * pFac;
+        } else if(src === 'binance') {
+            bin = parseFloat(document.getElementById('valBinance').value) || 0;
+            wally = bin / pFac;
+            bank = wally * (1 + pCom);
             ves = bank * tBdv;
         }
 
-        // Actualizar campos (excepto el que se está escribiendo)
-        if (source !== 'ves') document.getElementById('valVes').value = ves.toFixed(2);
-        if (source !== 'bank') document.getElementById('valBank').value = bank.toFixed(2);
-        if (source !== 'wally') document.getElementById('valWally').value = wally.toFixed(2);
-        if (source !== 'binance') document.getElementById('valBinance').value = binance.toFixed(4);
+        if(src !== 'ves') document.getElementById('valVes').value = ves.toFixed(2);
+        if(src !== 'bank') document.getElementById('valBank').value = bank.toFixed(2);
+        if(src !== 'wally') document.getElementById('valWally').value = wally.toFixed(2);
+        if(src !== 'binance') document.getElementById('valBinance').value = bin.toFixed(4);
 
-        // Cálculo de Ganancia
-        const retornoBs = binance * tP2p;
-        const ganancia = retornoBs - ves;
-        const pct = ves > 0 ? (ganancia / ves) * 100 : 0;
+        const gan = (bin * tP2p) - ves;
+        const pct = ves > 0 ? (gan / ves) * 100 : 0;
+        const be = bin > 0 ? ves / bin : 0;
 
-        // UI de Ganancia
-        document.getElementById('resGanancia').innerText = (ganancia >= 0 ? '+ ' : '') + ganancia.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Bs';
-        document.getElementById('resPct').innerText = (ganancia >= 0 ? '+' : '') + pct.toFixed(2) + '%';
+        document.getElementById('resGanancia').innerText = gan.toLocaleString('en-US',{minimumFractionDigits:2}) + ' Bs';
+        document.getElementById('resPct').innerText = (gan>=0?'+':'') + pct.toFixed(2) + '%';
+        document.getElementById('breakEven').innerText = "Vende a mínimo: " + be.toFixed(2) + " Bs para no perder";
         
-        const caja = document.getElementById('cajaResultado');
-        caja.className = 'result-box ' + (ves <= 0 ? '' : (ganancia >= 0 ? 'profit' : 'loss'));
-    }
-</script>
+        // Proyección Compuesta
+        let capFinal = ves;
+        if (ves > 0 && pct !== 0) {
+            capFinal = ves * Math.pow((1 + (pct/100)), ciclos);
+        }
+        document.getElementById('resProyeccion').innerText = capFinal.toLocaleString('en-US',{minimumFractionDigits:2}) + ' Bs';
 
+        document.getElementById('caja').className = 'total ' + (ves > 0 ? (gan >= 0 ? 'profit' : 'loss') : '');
+    }
+
+    function saveToHistory() {
+        const entry = {
+            date: new Date().toLocaleString(),
+            ves: document.getElementById('valVes').value,
+            usdt: document.getElementById('valBinance').value,
+            gan: document.getElementById('resGanancia').innerText
+        };
+        history.unshift(entry);
+        if(history.length > 10) history.pop();
+        localStorage.setItem('arb_history', JSON.stringify(history));
+        renderHistory();
+    }
+
+    function renderHistory() {
+        const body = document.getElementById('historyBody');
+        body.innerHTML = history.map(h => `
+            <tr>
+                <td>${h.date.split(',')[0]}</td>
+                <td>${h.ves}</td>
+                <td>${h.usdt}</td>
+                <td style="font-weight:bold">${h.gan}</td>
+            </tr>
+        `).join('');
+    }
+
+    function exportCSV() {
+        let csv = "Fecha,Inversion VES,USDT Binance,Ganancia Bs\n";
+        history.forEach(h => {
+            csv += `${h.date},${h.ves},${h.usdt},"${h.gan}"\n`;
+        });
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.setAttribute('href', url);
+        a.setAttribute('download', 'historial_arbitraje.csv');
+        a.click();
+    }
+
+    window.onload = renderHistory;
+</script>
 </body>
 </html>

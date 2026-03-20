@@ -3,118 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arbitraje BDV > Wally > Binance</title>
+    <title>Arbitraje | BDV - Wally - Binance</title>
     <style>
         :root {
-            /* Light Theme Variables */
-            --bg-color: #f0f2f5;
-            --card-bg: #ffffff;
-            --text-main: #1c1e21;
-            --text-muted: #65676b;
-            --primary: #0056b3;
-            --primary-hover: #004494;
-            --accent-wally: #00D1A1;
-            --accent-binance: #F3BA2F;
-            --border-color: #e4e6eb;
-            --success: #10b981;
-            --danger: #ef4444;
-            --shadow: 0 10px 25px rgba(0,0,0,0.08);
-            --input-bg: #ffffff;
+            --bg: #f8f9fa;
+            --surface: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border: #e5e7eb;
+            --accent: #2563eb;
+            --success: #059669;
+            --danger: #dc2626;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --transition: all 0.2s ease;
         }
 
         [data-theme="dark"] {
-            /* Dark Theme Variables */
-            --bg-color: #18191a;
-            --card-bg: #242526;
-            --text-main: #e4e6eb;
-            --text-muted: #b0b3b8;
-            --primary: #2d88ff;
-            --primary-hover: #1b74e4;
-            --border-color: #3e4042;
-            --shadow: 0 10px 25px rgba(0,0,0,0.5);
-            --input-bg: #3a3b3c;
+            --bg: #111827;
+            --surface: #1f2937;
+            --text-primary: #f9fafb;
+            --text-secondary: #9ca3af;
+            --border: #374151;
+            --accent: #3b82f6;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
         }
 
         * {
             box-sizing: border-box;
-            transition: background-color 0.3s, color 0.3s;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            background-color: var(--bg);
+            color: var(--text-primary);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
             padding: 20px;
         }
 
-        .container {
-            background-color: var(--card-bg);
-            border-radius: 16px;
+        .app-container {
+            background-color: var(--surface);
+            border-radius: 20px;
             box-shadow: var(--shadow);
             width: 100%;
-            max-width: 480px;
-            overflow: hidden;
+            max-width: 420px;
+            padding: 32px;
+            border: 1px solid var(--border);
         }
 
         .header {
-            padding: 24px;
-            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 32px;
         }
 
-        .header h2 {
-            margin: 0;
+        .header h1 {
             font-size: 1.25rem;
             font-weight: 600;
+            letter-spacing: -0.025em;
         }
 
-        .theme-toggle {
+        .theme-btn {
             background: none;
             border: none;
-            color: var(--text-main);
-            font-size: 1.5rem;
+            color: var(--text-secondary);
             cursor: pointer;
-            padding: 0;
+            font-size: 1.25rem;
+            padding: 8px;
+            border-radius: 50%;
         }
 
-        .content {
-            padding: 24px;
+        .theme-btn:hover {
+            background-color: var(--border);
+            color: var(--text-primary);
         }
 
-        .tabs {
+        .mode-toggle {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            background-color: var(--bg);
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
         }
 
-        .tab {
+        .mode-btn {
             flex: 1;
+            background: none;
+            border: none;
             padding: 10px;
-            text-align: center;
-            background-color: var(--input-bg);
-            border: 1px solid var(--border-color);
             border-radius: 8px;
-            cursor: pointer;
+            font-size: 0.875rem;
             font-weight: 500;
-            font-size: 0.9rem;
-            color: var(--text-muted);
+            color: var(--text-secondary);
+            cursor: pointer;
         }
 
-        .tab.active {
-            background-color: var(--primary);
-            color: white;
-            border-color: var(--primary);
+        .mode-btn.active {
+            background-color: var(--surface);
+            color: var(--text-primary);
+            box-shadow: var(--shadow);
         }
 
         .input-group {
-            margin-bottom: 16px;
+            margin-bottom: 20px;
+            position: relative;
         }
 
         .input-row {
@@ -128,182 +127,161 @@
 
         label {
             display: block;
-            margin-bottom: 6px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--text-muted);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 600;
         }
 
         input {
             width: 100%;
-            padding: 12px;
-            background-color: var(--input-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-main);
-            font-size: 1rem;
+            background-color: transparent;
+            border: none;
+            border-bottom: 2px solid var(--border);
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            padding: 8px 0;
+            font-weight: 500;
             outline: none;
         }
 
         input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(45, 136, 255, 0.2);
+            border-bottom-color: var(--accent);
         }
 
-        button.btn-calc {
-            width: 100%;
-            padding: 14px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 10px;
+        input::placeholder {
+            color: var(--border);
         }
 
-        button.btn-calc:hover {
-            background-color: var(--primary-hover);
+        .results {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
-        .results-container {
-            margin-top: 24px;
-            display: none;
-            animation: fadeIn 0.4s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .result-card {
-            background-color: var(--input-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 12px;
-        }
-
-        .result-header {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 8px;
+        .result-row {
             display: flex;
             justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
         }
 
         .result-value {
-            font-size: 1.25rem;
+            font-size: 1.125rem;
             font-weight: 600;
+            color: var(--text-primary);
         }
 
-        .accent-bdv { color: var(--primary); }
-        .accent-wally { color: var(--accent-wally); }
-        .accent-binance { color: var(--accent-binance); }
-
-        .summary-box {
-            background-color: var(--input-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
+        .total-box {
+            margin-top: 8px;
             padding: 16px;
-            margin-top: 16px;
-            text-align: center;
+            background-color: var(--bg);
+            border-radius: 12px;
+            text-align: right;
+            border: 1px solid var(--border);
         }
 
-        .summary-title {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin-bottom: 5px;
+        .total-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .total-value {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
         }
 
         .profit { color: var(--success); }
         .loss { color: var(--danger); }
         
-        .net-value {
-            font-size: 1.5rem;
-            font-weight: bold;
+        .percentage {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-top: 4px;
         }
+
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <div class="app-container">
         <div class="header">
-            <h2>Calculadora de Retorno</h2>
-            <button class="theme-toggle" onclick="toggleTheme()" id="themeIcon">🌙</button>
+            <h1>Arbitraje Electrónico</h1>
+            <button class="theme-btn" onclick="toggleTheme()" id="themeIcon">☀️</button>
         </div>
 
-        <div class="content">
-            <div class="input-row">
-                <div class="input-group">
-                    <label>Tasa BDV (VES/USD)</label>
-                    <input type="number" id="tasaBdv" placeholder="Ej: 36.50" step="0.01">
-                </div>
-                <div class="input-group">
-                    <label>Tasa P2P Binance (VES/USDT)</label>
-                    <input type="number" id="tasaP2p" placeholder="Ej: 38.20" step="0.01">
-                </div>
-            </div>
+        <div class="mode-toggle">
+            <button class="mode-btn active" id="btnWally" onclick="setMode('wally')">Base: Wally ($)</button>
+            <button class="mode-btn" id="btnBinance" onclick="setMode('binance')">Base: Binance (USDT)</button>
+        </div>
 
-            <div class="tabs">
-                <div class="tab active" id="tabWally" onclick="setMode('wally')">Tengo en Wally ($)</div>
-                <div class="tab" id="tabBinance" onclick="setMode('binance')">Quiero en Binance (USDT)</div>
-            </div>
-
+        <div class="input-row">
             <div class="input-group">
-                <label id="labelMonto">Monto a recargar en Wally:</label>
-                <input type="number" id="montoPrincipal" placeholder="0.00" step="0.01">
+                <label>Tasa BDV</label>
+                <input type="number" id="tasaBdv" placeholder="0.00" step="0.01">
+            </div>
+            <div class="input-group">
+                <label>Tasa P2P</label>
+                <input type="number" id="tasaP2p" placeholder="0.00" step="0.01">
+            </div>
+        </div>
+
+        <div class="input-group" style="margin-top: 8px;">
+            <label id="labelMonto">Monto a operar</label>
+            <input type="number" id="montoPrincipal" placeholder="0.00" step="0.01">
+        </div>
+
+        <div class="results">
+            <div class="result-row">
+                <span class="result-label">Inversión (BDV)</span>
+                <span class="result-value" id="resBdv">0.00 Bs</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Llega a Wally</span>
+                <span class="result-value" id="resWally">0.00 $</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Recibes en Binance</span>
+                <span class="result-value" id="resBinance">0.00 USDT</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Venta P2P Estimada</span>
+                <span class="result-value" id="resRetorno">0.00 Bs</span>
             </div>
 
-            <button class="btn-calc" onclick="calcular()">Calcular Operación</button>
-
-            <div class="results-container" id="resultados">
-                
-                <div class="result-card">
-                    <div class="result-header">
-                        <span>1. Inversión Inicial (BDV)</span>
-                        <span id="resBdvUsd">0.00 USD</span>
-                    </div>
-                    <div class="result-value accent-bdv" id="resBdvVes">0.00 Bs</div>
-                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Incluye comisión 6.25%</div>
-                </div>
-
-                <div class="result-card">
-                    <div class="result-header">
-                        <span>2. Tránsito (Wally)</span>
-                    </div>
-                    <div class="result-value accent-wally" id="resWally">0.00 $</div>
-                </div>
-
-                <div class="result-card">
-                    <div class="result-header">
-                        <span>3. Recibido (Binance)</span>
-                    </div>
-                    <div class="result-value accent-binance" id="resBinance">0.00 USDT</div>
-                </div>
-
-                <div class="summary-box">
-                    <div class="summary-title">Retorno P2P Estimado</div>
-                    <div class="result-value" id="resRetornoVes" style="margin-bottom: 10px;">0.00 Bs</div>
-                    
-                    <div class="summary-title">Ganancia / Pérdida Neta</div>
-                    <div class="net-value" id="resNeto">0.00 Bs</div>
-                    <div id="resPorcentaje" style="font-size: 0.85rem; margin-top: 4px; font-weight: 500;">0.00%</div>
-                </div>
-
+            <div class="total-box">
+                <div class="total-label">Resultado Neto</div>
+                <div class="total-value" id="resNeto">0.00 Bs</div>
+                <div class="percentage" id="resPorcentaje">0.00%</div>
             </div>
         </div>
     </div>
 
     <script>
-        let calcMode = 'wally'; // 'wally' o 'binance'
+        let calcMode = 'wally';
+
+        // Configurar modo oscuro por defecto basado en el sistema
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.body.setAttribute('data-theme', 'dark');
+            document.getElementById('themeIcon').innerText = '☀️';
+        } else {
+            document.getElementById('themeIcon').innerText = '🌙';
+        }
 
         function toggleTheme() {
             const body = document.body;
             const icon = document.getElementById('themeIcon');
-            
             if (body.getAttribute('data-theme') === 'dark') {
                 body.removeAttribute('data-theme');
                 icon.innerText = '🌙';
@@ -315,27 +293,29 @@
 
         function setMode(mode) {
             calcMode = mode;
-            document.getElementById('tabWally').classList.remove('active');
-            document.getElementById('tabBinance').classList.remove('active');
+            document.getElementById('btnWally').classList.remove('active');
+            document.getElementById('btnBinance').classList.remove('active');
             
             if (mode === 'wally') {
-                document.getElementById('tabWally').classList.add('active');
-                document.getElementById('labelMonto').innerText = 'Monto a recargar en Wally ($):';
+                document.getElementById('btnWally').classList.add('active');
+                document.getElementById('labelMonto').innerText = 'Monto a recargar en Wally ($)';
             } else {
-                document.getElementById('tabBinance').classList.add('active');
-                document.getElementById('labelMonto').innerText = 'USDT que necesitas recibir en Binance:';
+                document.getElementById('btnBinance').classList.add('active');
+                document.getElementById('labelMonto').innerText = 'USDT deseados en Binance';
             }
+            calcular(); // Recalcular inmediatamente al cambiar de modo
+        }
+
+        function formatNumber(num, decimals = 2) {
+            // Usamos en-US para forzar el punto como separador decimal
+            if (isNaN(num) || !isFinite(num)) return (0).toLocaleString('en-US', {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
+            return num.toLocaleString('en-US', {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
         }
 
         function calcular() {
-            const tasaBdv = parseFloat(document.getElementById('tasaBdv').value);
-            const tasaP2p = parseFloat(document.getElementById('tasaP2p').value);
-            const monto = parseFloat(document.getElementById('montoPrincipal').value);
-
-            if (isNaN(tasaBdv) || isNaN(tasaP2p) || isNaN(monto) || tasaBdv <= 0 || tasaP2p <= 0 || monto <= 0) {
-                alert("Por favor, completa todos los campos con valores mayores a cero.");
-                return;
-            }
+            const tasaBdv = parseFloat(document.getElementById('tasaBdv').value) || 0;
+            const tasaP2p = parseFloat(document.getElementById('tasaP2p').value) || 0;
+            const monto = parseFloat(document.getElementById('montoPrincipal').value) || 0;
 
             const COMISION_BDV = 0.0625;
             const FACTOR_BINANCE = 0.935031;
@@ -343,54 +323,58 @@
             let wallyUsd = 0;
             let binanceUsdt = 0;
 
-            // Lógica dependiendo del modo seleccionado
-            if (calcMode === 'wally') {
-                wallyUsd = monto;
-                binanceUsdt = wallyUsd * FACTOR_BINANCE;
-            } else {
-                binanceUsdt = monto;
-                wallyUsd = binanceUsdt / FACTOR_BINANCE;
+            if (monto > 0) {
+                if (calcMode === 'wally') {
+                    wallyUsd = monto;
+                    binanceUsdt = wallyUsd * FACTOR_BINANCE;
+                } else {
+                    binanceUsdt = monto;
+                    wallyUsd = binanceUsdt / FACTOR_BINANCE;
+                }
             }
 
-            // Cálculos generales
             const bdvUsd = wallyUsd * (1 + COMISION_BDV);
             const inversionVes = bdvUsd * tasaBdv;
             const retornoVes = binanceUsdt * tasaP2p;
             
             const gananciaNeta = retornoVes - inversionVes;
-            const porcentajeRendimiento = (gananciaNeta / inversionVes) * 100;
+            const porcentajeRendimiento = inversionVes > 0 ? (gananciaNeta / inversionVes) * 100 : 0;
 
-            // Actualizar la UI
-            document.getElementById('resBdvUsd').innerText = bdvUsd.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' USD';
-            document.getElementById('resBdvVes').innerText = inversionVes.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Bs';
-            
-            document.getElementById('resWally').innerText = wallyUsd.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' $';
-            document.getElementById('resBinance').innerText = binanceUsdt.toLocaleString('en-US', {minimumFractionDigits: 4, maximumFractionDigits: 4}) + ' USDT';
-            
-            document.getElementById('resRetornoVes').innerText = retornoVes.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Bs';
+            // Actualizar la interfaz con el formato de punto decimal
+            document.getElementById('resBdv').innerText = formatNumber(inversionVes) + ' Bs';
+            document.getElementById('resWally').innerText = formatNumber(wallyUsd) + ' $';
+            document.getElementById('resBinance').innerText = formatNumber(binanceUsdt, 4) + ' USDT';
+            document.getElementById('resRetorno').innerText = formatNumber(retornoVes) + ' Bs';
 
-            // Lógica de colores para Ganancia/Pérdida
             const netElement = document.getElementById('resNeto');
             const percentElement = document.getElementById('resPorcentaje');
             
-            netElement.innerText = (gananciaNeta > 0 ? '+' : '') + gananciaNeta.toLocaleString('es-VE', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Bs';
-            percentElement.innerText = (porcentajeRendimiento > 0 ? '+' : '') + porcentajeRendimiento.toFixed(2) + '%';
+            let prefix = gananciaNeta > 0 ? '+' : '';
+            netElement.innerText = prefix + formatNumber(gananciaNeta) + ' Bs';
+            percentElement.innerText = prefix + formatNumber(porcentajeRendimiento) + '%';
 
-            if (gananciaNeta >= 0) {
-                netElement.className = 'net-value profit';
-                percentElement.className = 'profit';
-            } else {
-                netElement.className = 'net-value loss';
-                percentElement.className = 'loss';
+            // Colores dinámicos
+            netElement.className = 'total-value';
+            percentElement.className = 'percentage';
+            
+            if (monto > 0 && tasaBdv > 0 && tasaP2p > 0) {
+                if (gananciaNeta > 0) {
+                    netElement.classList.add('profit');
+                    percentElement.classList.add('profit');
+                } else if (gananciaNeta < 0) {
+                    netElement.classList.add('loss');
+                    percentElement.classList.add('loss');
+                }
             }
-
-            document.getElementById('resultados').style.display = 'block';
         }
 
-        // Detectar preferencia del sistema para el modo oscuro por defecto (Opcional)
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            toggleTheme();
-        }
+        // Agregar Event Listeners para cálculo en tiempo real
+        document.getElementById('tasaBdv').addEventListener('input', calcular);
+        document.getElementById('tasaP2p').addEventListener('input', calcular);
+        document.getElementById('montoPrincipal').addEventListener('input', calcular);
+        
+        // Ejecutar cálculo inicial para que todo esté en 0.00
+        calcular();
     </script>
 </body>
 </html>

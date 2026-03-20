@@ -3,133 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arbitraje Master Console v3.0</title>
+    <title>Consola de Arbitraje Profesional</title>
     <style>
         :root {
-            --bg: #f0f2f5; --card: #ffffff; --text: #1a1a1a; --primary: #2563eb;
-            --success: #10b981; --danger: #ef4444; --border: #e2e8f0; --accent: #8b5cf6;
+            --bg: #f4f7fa; --card: #ffffff; --text: #1e293b; --border: #e2e8f0;
+            --bdv: #d32f2f; --wally: #6b21a8; --binance: #eab308; --success: #10b981;
         }
-        [data-theme="dark"] {
-            --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --border: #334155;
+        body.dark {
+            --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; --border: #334155;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; transition: background 0.3s, color 0.3s; }
         body { background: var(--bg); color: var(--text); padding: 15px; display: flex; flex-direction: column; align-items: center; }
-        .app { width: 100%; max-width: 480px; background: var(--card); padding: 25px; border-radius: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid var(--border); margin-bottom: 20px; }
         
-        .section-title { font-size: 0.7rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; margin: 20px 0 10px 0; text-transform: uppercase; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
-        .section-title:first-of-type { margin-top: 0; }
+        .app { width: 100%; max-width: 480px; background: var(--card); padding: 25px; border-radius: 28px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border: 1px solid var(--border); }
         
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        .input-group { background: var(--bg); padding: 10px; border-radius: 12px; border: 1px solid var(--border); }
-        .input-group label { display: block; font-size: 0.6rem; font-weight: 700; opacity: 0.7; margin-bottom: 3px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .header h2 { font-size: 1.1rem; font-weight: 900; letter-spacing: 1px; color: var(--bdv); }
+
+        .section-title { font-size: 0.75rem; font-weight: 800; opacity: 0.6; letter-spacing: 1px; margin: 20px 0 10px 0; text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .input-group { background: var(--bg); padding: 10px 15px; border-radius: 16px; border: 1px solid var(--border); }
+        .input-group label { display: block; font-size: 0.65rem; font-weight: 700; margin-bottom: 4px; }
         .input-group input { width: 100%; background: transparent; border: none; outline: none; color: var(--text); font-size: 1.1rem; font-weight: 700; }
 
-        .step-box { margin-bottom: 8px; padding: 12px; border-radius: 15px; background: var(--bg); border-left: 5px solid var(--primary); display: flex; justify-content: space-between; align-items: center; }
-        .step-box input { background: transparent; border: none; outline: none; color: var(--text); font-size: 1.2rem; font-weight: 800; width: 60%; text-align: right; }
-        
-        .break-even { background: #fffbeb; border: 1px solid #fef3c7; padding: 10px; border-radius: 12px; margin: 15px 0; text-align: center; color: #92400e; font-weight: 700; font-size: 0.85rem; }
-        [data-theme="dark"] .break-even { background: #451a03; color: #fcd34d; border: none; }
+        .step-box { margin-bottom: 10px; padding: 15px; border-radius: 18px; background: var(--bg); border-left: 6px solid; display: flex; justify-content: space-between; align-items: center; }
+        .step-box.bdv { border-color: var(--bdv); }
+        .step-box.wally { border-color: var(--wally); }
+        .step-box.binance { border-color: var(--binance); }
+        .step-box label { font-size: 0.8rem; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+        .step-box input { background: transparent; border: none; outline: none; color: var(--text); font-size: 1.3rem; font-weight: 800; width: 60%; text-align: right; }
 
-        .total { padding: 20px; border-radius: 18px; text-align: center; color: white; background: var(--primary); }
-        .total.profit { background: var(--success); }
-        .total.loss { background: var(--danger); }
-        
-        .btn-action { width: 100%; padding: 14px; margin-top: 10px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .btn-save { background: var(--primary); color: white; }
-        .btn-download { background: var(--text); color: var(--card); margin-top: 5px; font-size: 0.8rem; }
-        
-        /* Tabla de Historial */
-        .history-container { width: 100%; max-width: 480px; background: var(--card); border-radius: 20px; padding: 15px; border: 1px solid var(--border); overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
-        th { text-align: left; padding: 10px; border-bottom: 2px solid var(--border); color: var(--primary); }
-        td { padding: 10px; border-bottom: 1px solid var(--border); }
+        .break-even { background: rgba(234, 179, 8, 0.1); padding: 12px; border-radius: 14px; margin: 15px 0; text-align: center; color: var(--binance); font-weight: 700; font-size: 0.9rem; border: 1px dashed var(--binance); }
 
-        /* Proyección */
-        .proyeccion-card { background: var(--accent); color: white; padding: 15px; border-radius: 15px; margin-top: 10px; text-align: center; }
+        .result-card { padding: 20px; border-radius: 20px; text-align: center; color: white; background: #64748b; margin-top: 10px; }
+        .result-card.profit { background: var(--success); box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); }
+        .result-card.loss { background: var(--bdv); }
+
+        .proyeccion-area { background: var(--wally); color: white; padding: 20px; border-radius: 22px; margin-top: 20px; }
+        .proj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px; }
+
+        .btn { width: 100%; padding: 16px; border-radius: 16px; border: none; font-weight: 800; cursor: pointer; margin-top: 15px; font-size: 0.9rem; }
+        .btn-save { background: var(--text); color: var(--card); }
+        
+        .history { width: 100%; max-width: 480px; margin-top: 20px; background: var(--card); border-radius: 22px; padding: 20px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+        th { text-align: left; padding: 10px; border-bottom: 2px solid var(--border); opacity: 0.6; }
+        td { padding: 12px 10px; border-bottom: 1px solid var(--border); }
     </style>
 </head>
-<body>
+<body class="">
 
 <div class="app">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <h2 style="font-size:1rem; font-weight: 900;">MASTER CONSOLE</h2>
-        <button onclick="document.body.toggleAttribute('data-theme')" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">🌓</button>
+    <div class="header">
+        <h2>🏦 CONSOLA DE FLUJO</h2>
+        <button onclick="document.body.classList.toggle('dark')" style="background:none; border:none; cursor:pointer; font-size:1.4rem;">🌓</button>
     </div>
 
-    <p class="section-title">Ajustes de Mercado</p>
+    <p class="section-title">⚙️ Ajustes de Mercado</p>
     <div class="grid">
         <div class="input-group">
-            <label>Tasa Compra (Banco)</label>
-            <input type="number" id="tasaBdv" value="0.00" oninput="recalc('ves')">
+            <label>Compra Banco (Bs)</label>
+            <input type="number" id="tasaBdv" value="0.00" oninput="recalc('ves')" onfocus="this.select()">
         </div>
         <div class="input-group">
-            <label>Tasa Venta (P2P)</label>
-            <input type="number" id="tasaP2p" value="0.00" oninput="recalc('ves')">
+            <label>Venta P2P (Bs)</label>
+            <input type="number" id="tasaP2p" value="0.00" oninput="recalc('ves')" onfocus="this.select()">
         </div>
         <div class="input-group">
             <label>Comisión Banco (%)</label>
-            <input type="number" id="pComision" value="6.25" step="0.01" oninput="recalc('ves')">
+            <input type="number" id="pComision" value="6.25" oninput="recalc('ves')" onfocus="this.select()">
         </div>
         <div class="input-group">
             <label>Factor Wally-Bin</label>
-            <input type="number" id="pFactor" value="0.9350" step="0.0001" oninput="recalc('ves')">
+            <input type="number" id="pFactor" value="0.9350" step="0.0001" oninput="recalc('ves')" onfocus="this.select()">
         </div>
     </div>
 
-    <p class="section-title">Flujo de Capital</p>
-    <div class="step-box" style="border-color: #64748b;"><label>VES</label><input type="number" id="valVes" oninput="recalc('ves')"></div>
-    <div class="step-box" style="border-color: #2563eb;"><label>USD BANCO</label><input type="number" id="valBank" oninput="recalc('bank')"></div>
-    <div class="step-box" style="border-color: #8b5cf6;"><label>WALLY NETO</label><input type="number" id="valWally" oninput="recalc('wally')"></div>
-    <div class="step-box" style="border-color: #f59e0b;"><label>BINANCE</label><input type="number" id="valBinance" oninput="recalc('binance')"></div>
+    <p class="section-title">💸 Flujo de Caja</p>
+    <div class="step-box bdv"><label>🔴 Bolívares</label><input type="number" id="valVes" oninput="recalc('ves')" onfocus="this.select()"></div>
+    <div class="step-box bdv"><label>💵 USD Banco</label><input type="number" id="valBank" oninput="recalc('bank')" onfocus="this.select()"></div>
+    <div class="step-box wally"><label>🟣 Wally Neto</label><input type="number" id="valWally" oninput="recalc('wally')" onfocus="this.select()"></div>
+    <div class="step-box binance"><label>🟡 Binance USDT</label><input type="number" id="valBinance" oninput="recalc('binance')" onfocus="this.select()"></div>
 
     <div class="break-even" id="breakEven">Mínimo para no perder: 0.00 Bs</div>
 
-    <div class="total" id="caja">
-        <div style="font-size:0.7rem; opacity:0.9; text-transform:uppercase; font-weight:700;">Resultado Neto</div>
+    <div class="result-card" id="caja">
+        <div style="font-size:0.7rem; font-weight:800; text-transform:uppercase;">Resultado de Operación</div>
         <div id="resGanancia" style="font-size:1.8rem; font-weight:900;">0.00 Bs</div>
         <div id="resPct" style="font-size:0.9rem; font-weight:700;">0.00%</div>
     </div>
 
-    <p class="section-title">Proyección Multi-Ciclo</p>
-    <div class="input-group" style="margin-bottom: 10px;">
+    <p class="section-title">📈 Proyección Multi-Ciclo</p>
+    <div class="input-group" style="margin-bottom: 15px;">
         <label>Número de Vueltas (Ciclos)</label>
-        <input type="number" id="numCiclos" value="5" oninput="recalc('ves')">
+        <input type="number" id="numCiclos" value="1" oninput="recalc('ves')" onfocus="this.select()">
     </div>
-    <div class="proyeccion-card">
-        <div style="font-size: 0.65rem; font-weight: 700;">CAPITAL ESTIMADO TRAS CICLOS</div>
-        <div id="resProyeccion" style="font-size: 1.4rem; font-weight: 900;">0.00 Bs</div>
+    
+    <div class="proyeccion-area">
+        <div style="font-size: 0.65rem; font-weight: 800; opacity: 0.9;">TOTAL TRAS LOS CICLOS</div>
+        <div class="proj-grid">
+            <div>
+                <span style="font-size: 0.6rem; display:block; opacity: 0.8;">CAPITAL FINAL</span>
+                <span id="resCapFinal" style="font-size: 1.1rem; font-weight: 900;">0.00 Bs</span>
+            </div>
+            <div style="text-align: right; border-left: 1px solid rgba(255,255,255,0.3);">
+                <span style="font-size: 0.6rem; display:block; opacity: 0.8;">GANANCIA NETA</span>
+                <span id="resGanNeta" style="font-size: 1.1rem; font-weight: 900; color: #bef264;">0.00 Bs</span>
+            </div>
+        </div>
     </div>
 
-    <button class="btn-action btn-save" onclick="saveToHistory()">GUARDAR OPERACIÓN</button>
+    <button class="btn btn-save" onclick="saveToHistory()">💾 GUARDAR EN HISTORIAL</button>
 </div>
 
-<div class="history-container">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <p class="section-title" style="border:none; margin:0;">Historial Reciente</p>
-        <button onclick="exportCSV()" class="btn-action btn-download" style="width:auto; margin:0; padding:5px 10px;">Excel (CSV)</button>
+<div class="history">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+        <h3 style="font-size:0.8rem; font-weight:800;">📝 ÚLTIMOS REGISTROS</h3>
+        <button onclick="exportCSV()" style="font-size:0.7rem; font-weight:800; background:none; border:none; color:var(--bdv); cursor:pointer;">EXPORTAR EXCEL</button>
     </div>
     <table id="historyTable">
-        <thead>
-            <tr>
-                <th>Fecha</th>
-                <th>Inversión</th>
-                <th>USDT</th>
-                <th>Ganancia</th>
-            </tr>
-        </thead>
+        <thead><tr><th>FECHA</th><th>INVERSIÓN</th><th>USDT</th><th>GANANCIA</th></tr></thead>
         <tbody id="historyBody"></tbody>
     </table>
 </div>
 
 <script>
-    let history = JSON.parse(localStorage.getItem('arb_history')) || [];
+    let history = JSON.parse(localStorage.getItem('arb_v3_data')) || [];
 
     function recalc(src) {
         const pCom = (parseFloat(document.getElementById('pComision').value) || 0) / 100;
         const pFac = parseFloat(document.getElementById('pFactor').value) || 0;
         const tBdv = parseFloat(document.getElementById('tasaBdv').value) || 0;
         const tP2p = parseFloat(document.getElementById('tasaP2p').value) || 0;
-        const ciclos = parseInt(document.getElementById('numCiclos').value) || 0;
+        const ciclos = parseInt(document.getElementById('numCiclos').value) || 1;
 
         let ves = 0, bank = 0, wally = 0, bin = 0;
 
@@ -155,64 +162,63 @@
             ves = bank * tBdv;
         }
 
+        // Actualizar valores
         if(src !== 'ves') document.getElementById('valVes').value = ves.toFixed(2);
         if(src !== 'bank') document.getElementById('valBank').value = bank.toFixed(2);
         if(src !== 'wally') document.getElementById('valWally').value = wally.toFixed(2);
         if(src !== 'binance') document.getElementById('valBinance').value = bin.toFixed(4);
 
-        const gan = (bin * tP2p) - ves;
-        const pct = ves > 0 ? (gan / ves) * 100 : 0;
+        const gananciaUnica = (bin * tP2p) - ves;
+        const pct = ves > 0 ? (gananciaUnica / ves) * 100 : 0;
         const be = bin > 0 ? ves / bin : 0;
 
-        document.getElementById('resGanancia').innerText = gan.toLocaleString('en-US',{minimumFractionDigits:2}) + ' Bs';
-        document.getElementById('resPct').innerText = (gan>=0?'+':'') + pct.toFixed(2) + '%';
+        document.getElementById('resGanancia').innerText = gananciaUnica.toLocaleString('es-VE',{minimumFractionDigits:2}) + ' Bs';
+        document.getElementById('resPct').innerText = (gananciaUnica>=0?'+':'') + pct.toFixed(2) + '%';
         document.getElementById('breakEven').innerText = "Vende a mínimo: " + be.toFixed(2) + " Bs para no perder";
         
         // Proyección Compuesta
-        let capFinal = ves;
-        if (ves > 0 && pct !== 0) {
-            capFinal = ves * Math.pow((1 + (pct/100)), ciclos);
-        }
-        document.getElementById('resProyeccion').innerText = capFinal.toLocaleString('en-US',{minimumFractionDigits:2}) + ' Bs';
+        let capitalFinal = ves * Math.pow((1 + (pct/100)), ciclos);
+        let gananciaNetaTotal = capitalFinal - ves;
 
-        document.getElementById('caja').className = 'total ' + (ves > 0 ? (gan >= 0 ? 'profit' : 'loss') : '');
+        document.getElementById('resCapFinal').innerText = capitalFinal.toLocaleString('es-VE',{minimumFractionDigits:2}) + ' Bs';
+        document.getElementById('resGanNeta').innerText = (gananciaNetaTotal >= 0 ? '+ ' : '') + gananciaNetaTotal.toLocaleString('es-VE',{minimumFractionDigits:2}) + ' Bs';
+
+        const caja = document.getElementById('caja');
+        caja.className = 'result-card ' + (ves > 0 ? (gananciaUnica >= 0 ? 'profit' : 'loss') : '');
     }
 
     function saveToHistory() {
         const entry = {
-            date: new Date().toLocaleString(),
+            date: new Date().toLocaleDateString(),
             ves: document.getElementById('valVes').value,
             usdt: document.getElementById('valBinance').value,
             gan: document.getElementById('resGanancia').innerText
         };
         history.unshift(entry);
-        if(history.length > 10) history.pop();
-        localStorage.setItem('arb_history', JSON.stringify(history));
+        if(history.length > 8) history.pop();
+        localStorage.setItem('arb_v3_data', JSON.stringify(history));
         renderHistory();
     }
 
     function renderHistory() {
-        const body = document.getElementById('historyBody');
-        body.innerHTML = history.map(h => `
+        document.getElementById('historyBody').innerHTML = history.map(h => `
             <tr>
-                <td>${h.date.split(',')[0]}</td>
+                <td>${h.date}</td>
                 <td>${h.ves}</td>
                 <td>${h.usdt}</td>
-                <td style="font-weight:bold">${h.gan}</td>
+                <td style="color:var(--success); font-weight:bold">${h.gan}</td>
             </tr>
         `).join('');
     }
 
     function exportCSV() {
         let csv = "Fecha,Inversion VES,USDT Binance,Ganancia Bs\n";
-        history.forEach(h => {
-            csv += `${h.date},${h.ves},${h.usdt},"${h.gan}"\n`;
-        });
+        history.forEach(h => { csv += `${h.date},${h.ves},${h.usdt},"${h.gan}"\n`; });
         const blob = new Blob([csv], { type: 'text/csv' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.setAttribute('href', url);
-        a.setAttribute('download', 'historial_arbitraje.csv');
+        a.href = url;
+        a.download = 'historial_arbitraje.csv';
         a.click();
     }
 

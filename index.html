@@ -3,50 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consola de Arbitraje Unificada</title>
+    <title>Consola de Arbitraje Total</title>
     <style>
         :root {
-            --bg: #f4f7f9;
+            --bg: #f8fafc;
             --card: #ffffff;
-            --text-main: #1e293b;
+            --text: #0f172a;
             --text-sub: #64748b;
             --border: #e2e8f0;
-            --accent: #2563eb;
+            --primary: #2563eb;
             --success: #10b981;
             --danger: #ef4444;
-            --input-bg: #f8fafc;
-            --shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            --input-focus: #dbeafe;
         }
 
         [data-theme="dark"] {
-            --bg: #0f172a;
+            --bg: #020617;
             --card: #1e293b;
-            --text-main: #f8fafc;
+            --text: #f1f5f9;
             --text-sub: #94a3b8;
             --border: #334155;
-            --input-bg: #0f172a;
+            --input-focus: #1e3a8a;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif; }
 
         body {
             background-color: var(--bg);
-            color: var(--text-main);
+            color: var(--text);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
-            transition: all 0.3s ease;
+            padding: 15px;
         }
 
-        .container {
+        .main-container {
             background-color: var(--card);
             width: 100%;
-            max-width: 480px;
-            border-radius: 28px;
-            padding: 30px;
-            box-shadow: var(--shadow);
+            max-width: 450px;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
             border: 1px solid var(--border);
         }
 
@@ -54,228 +52,230 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-        }
-
-        .header h1 { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.5px; }
-
-        .theme-toggle {
-            background: var(--input-bg);
-            border: 1px solid var(--border);
-            padding: 8px;
-            border-radius: 12px;
-            cursor: pointer;
-            color: var(--text-main);
-        }
-
-        /* Sección de Entradas */
-        .grid-inputs {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
             margin-bottom: 20px;
         }
 
-        .input-box {
-            background: var(--input-bg);
-            padding: 12px 16px;
+        .header h1 { font-size: 1.1rem; font-weight: 800; text-transform: uppercase; color: var(--primary); }
+
+        .rates-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px dashed var(--border);
+        }
+
+        .input-group {
+            background: var(--bg);
+            padding: 10px 14px;
             border-radius: 16px;
             border: 1px solid var(--border);
         }
 
-        .input-box label {
+        .input-group label {
             display: block;
-            font-size: 0.7rem;
-            font-weight: 700;
+            font-size: 0.65rem;
+            font-weight: 800;
             color: var(--text-sub);
             margin-bottom: 4px;
             text-transform: uppercase;
         }
 
-        .input-box input {
+        .input-group input {
             width: 100%;
             background: transparent;
             border: none;
             outline: none;
-            color: var(--text-main);
-            font-size: 1.2rem;
-            font-weight: 600;
+            color: var(--text);
+            font-size: 1.1rem;
+            font-weight: 700;
         }
 
-        .full-width { grid-column: span 2; border: 2px solid var(--accent); }
-
-        /* Flujo de Resultados */
-        .flow {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin: 20px 0;
+        .flow-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-sub);
+            margin-bottom: 12px;
+            text-align: center;
         }
 
-        .step {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 20px;
-            background: var(--input-bg);
-            border-radius: 16px;
-            border-left: 4px solid var(--accent);
+        .step-card {
+            position: relative;
+            background: var(--bg);
+            margin-bottom: 10px;
+            padding: 14px;
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
         }
 
-        .step-info span { display: block; }
-        .label { font-size: 0.75rem; color: var(--text-sub); font-weight: 600; }
-        .val { font-size: 1.05rem; font-weight: 700; }
+        .step-card:focus-within {
+            border-color: var(--primary);
+            background: var(--input-focus);
+            transform: scale(1.02);
+        }
 
-        /* Resultado Final */
-        .summary {
-            padding: 24px;
+        .step-card label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-sub);
+        }
+
+        .step-card input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-top: 2px;
+        }
+
+        .badge {
+            position: absolute;
+            right: 14px;
+            top: 14px;
+            font-size: 0.6rem;
+            padding: 2px 8px;
+            border-radius: 8px;
+            background: var(--border);
+            font-weight: 700;
+        }
+
+        .result-box {
+            margin-top: 15px;
+            padding: 20px;
             border-radius: 20px;
             text-align: center;
-            background: var(--accent);
+            background: var(--primary);
             color: white;
-            margin-top: 10px;
         }
 
-        .summary.profit { background: var(--success); }
-        .summary.loss { background: var(--danger); }
+        .profit { background: var(--success); }
+        .loss { background: var(--danger); }
 
-        .summary-label { font-size: 0.85rem; font-weight: 600; opacity: 0.9; }
-        .summary-val { font-size: 2.2rem; font-weight: 800; margin: 5px 0; }
-        .summary-pct { font-size: 1rem; font-weight: 700; background: rgba(0,0,0,0.15); padding: 4px 15px; border-radius: 50px; display: inline-block; }
+        .result-val { font-size: 1.8rem; font-weight: 900; }
+        .result-pct { font-size: 0.9rem; font-weight: 700; opacity: 0.9; }
 
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="main-container">
     <div class="header">
-        <h1>Arbitraje <span style="color:var(--accent)">Full-Flow</span></h1>
-        <button class="theme-toggle" onclick="toggleTheme()" id="tBtn">🌙</button>
+        <h1>Arbitraje Interconectado</h1>
+        <button onclick="document.body.getAttribute('data-theme')=='dark'?document.body.removeAttribute('data-theme'):document.body.setAttribute('data-theme','dark')" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">🌓</button>
     </div>
 
-    <div class="grid-inputs">
-        <div class="input-box">
-            <label>Tasa Compra BDV</label>
-            <input type="number" id="tasaBdv" placeholder="0.00" step="0.01">
+    <div class="rates-grid">
+        <div class="input-group">
+            <label>BCV / Tasa Banco</label>
+            <input type="number" id="tasaBdv" placeholder="0.00" oninput="recalc('ves')">
         </div>
-        <div class="input-box">
-            <label>Tasa Venta P2P</label>
-            <input type="number" id="tasaP2p" placeholder="0.00" step="0.01">
-        </div>
-        <div class="input-box full-width">
-            <label>Inversión Base (Bolívares)</label>
-            <input type="number" id="montoBs" placeholder="¿Cuánto vas a usar?" step="0.01">
+        <div class="input-group">
+            <label>Tasa P2P Binance</label>
+            <input type="number" id="tasaP2p" placeholder="0.00" oninput="recalc('ves')">
         </div>
     </div>
 
-    <div class="flow">
-        <div class="step">
-            <div class="step-info">
-                <span class="label">1. USD en Cuenta Bancaria</span>
-                <span class="val" id="resUsdBdv">0.00 $</span>
-            </div>
-        </div>
+    <p class="flow-title">FLUJO DE DINERO (EDITA CUALQUIER CAMPO)</p>
 
-        <div class="step" style="border-left-color: #8b5cf6;">
-            <div class="step-info">
-                <span class="label">2. Saldo Neto en Wally</span>
-                <span class="val" id="resWally">0.00 $</span>
-            </div>
-            <span style="font-size: 0.7rem; color: var(--text-sub);">-6.25%</span>
-        </div>
-
-        <div class="step" style="border-left-color: #f59e0b;">
-            <div class="step-info">
-                <span class="label">3. USDT en Binance</span>
-                <span class="val" id="resBinance">0.0000 USDT</span>
-            </div>
-        </div>
+    <div class="step-card" style="border-left: 5px solid var(--text-sub);">
+        <label>Base Bolívares (VES)</label>
+        <input type="number" id="valVes" placeholder="0.00" oninput="recalc('ves')">
+        <span class="badge">INVERSIÓN</span>
     </div>
 
-    <div class="summary" id="cajaNeto">
-        <div class="summary-label" id="labelNeto">Ganancia Estimada</div>
-        <div class="summary-val" id="resNeto">0.00 Bs</div>
-        <div class="summary-pct" id="resPorcentaje">0.00%</div>
+    <div class="step-card" style="border-left: 5px solid var(--primary);">
+        <label>USD en Cuenta (Gross)</label>
+        <input type="number" id="valBank" placeholder="0.00" oninput="recalc('bank')">
+        <span class="badge">BANCO</span>
+    </div>
+
+    <div class="step-card" style="border-left: 5px solid #8b5cf6;">
+        <label>Saldo Wally (Neto)</label>
+        <input type="number" id="valWally" placeholder="0.00" oninput="recalc('wally')">
+        <span class="badge" style="color:#8b5cf6">WALLY</span>
+    </div>
+
+    <div class="step-card" style="border-left: 5px solid #f59e0b;">
+        <label>USDT en Binance</label>
+        <input type="number" id="valBinance" placeholder="0.0000" oninput="recalc('binance')">
+        <span class="badge" style="color:#f59e0b">BINANCE</span>
+    </div>
+
+    <div class="result-box" id="cajaResultado">
+        <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Retorno Neto Estimado</div>
+        <div class="result-val" id="resGanancia">0.00 Bs</div>
+        <div class="result-pct" id="resPct">0.00%</div>
     </div>
 </div>
 
 <script>
-    const ids = ['tasaBdv', 'tasaP2p', 'montoBs'];
-    
-    // Al cargar: recuperar datos y aplicar tema
+    const COMISION_BANCO = 0.0625; // 6.25%
+    const FACTOR_WALLY_BINANCE = 0.935031;
+
+    // Cargar tasas al inicio
     window.onload = () => {
-        ids.forEach(id => {
-            const val = localStorage.getItem(id);
-            if(val) document.getElementById(id).value = val;
-            document.getElementById(id).addEventListener('input', calcular);
-        });
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) toggleTheme();
-        calcular();
+        if(localStorage.getItem('tBdv')) document.getElementById('tasaBdv').value = localStorage.getItem('tBdv');
+        if(localStorage.getItem('tP2p')) document.getElementById('tasaP2p').value = localStorage.getItem('tP2p');
     };
 
-    function toggleTheme() {
-        const body = document.body;
-        const btn = document.getElementById('tBtn');
-        if (body.getAttribute('data-theme') === 'dark') {
-            body.removeAttribute('data-theme');
-            btn.innerText = '🌙';
-        } else {
-            body.setAttribute('data-theme', 'dark');
-            btn.innerText = '☀️';
-        }
-    }
-
-    function fmt(n, d = 2) {
-        return n.toLocaleString('en-US', {minimumFractionDigits: d, maximumFractionDigits: d});
-    }
-
-    function calcular() {
+    function recalc(source) {
         const tBdv = parseFloat(document.getElementById('tasaBdv').value) || 0;
         const tP2p = parseFloat(document.getElementById('tasaP2p').value) || 0;
-        const mBs = parseFloat(document.getElementById('montoBs').value) || 0;
-
-        // Persistencia
-        ids.forEach(id => localStorage.setItem(id, document.getElementById(id).value));
-
-        // Constantes del proceso
-        const COMISION_BANCO = 0.0625; // 6.25%
-        const FACTOR_BINANCE = 0.935031;
-
-        // Lógica de Flujo
-        // 1. Dólares que el banco te otorga por esos Bs
-        const usdBanco = tBdv > 0 ? mBs / tBdv : 0;
-
-        // 2. Dólares que realmente caen en Wally (descontando la comisión que el banco suma al precio)
-        const usdWally = usdBanco / (1 + COMISION_BANCO);
-
-        // 3. USDT que recibes tras el cambio interno
-        const usdtBinance = usdWally * FACTOR_BINANCE;
-
-        // 4. Retorno final en Bs al vender en P2P
-        const retornoBs = usdtBinance * tP2p;
-        const netoBs = retornoBs - mBs;
-        const pct = mBs > 0 ? (netoBs / mBs) * 100 : 0;
-
-        // Actualizar Interfaz
-        document.getElementById('resUsdBdv').innerText = fmt(usdBanco) + ' $';
-        document.getElementById('resWally').innerText = fmt(usdWally) + ' $';
-        document.getElementById('resBinance').innerText = fmt(usdtBinance, 4) + ' USDT';
-        document.getElementById('resNeto').innerText = (netoBs >= 0 ? '+ ' : '') + fmt(netoBs) + ' Bs';
-        document.getElementById('resPorcentaje').innerText = (netoBs >= 0 ? '+' : '') + fmt(pct) + '%';
-
-        const caja = document.getElementById('cajaNeto');
-        const label = document.getElementById('labelNeto');
         
-        caja.className = 'summary';
-        if (mBs > 0) {
-            if (netoBs > 0) {
-                caja.classList.add('profit');
-                label.innerText = 'Ganancia Neta';
-            } else {
-                caja.classList.add('loss');
-                label.innerText = 'Pérdida Neta';
-            }
+        // Guardar tasas
+        localStorage.setItem('tBdv', tBdv);
+        localStorage.setItem('tP2p', tP2p);
+
+        let ves = 0, bank = 0, wally = 0, binance = 0;
+
+        if (source === 'ves') {
+            ves = parseFloat(document.getElementById('valVes').value) || 0;
+            bank = tBdv > 0 ? ves / tBdv : 0;
+            wally = bank / (1 + COMISION_BANCO);
+            binance = wally * FACTOR_WALLY_BINANCE;
+        } 
+        else if (source === 'bank') {
+            bank = parseFloat(document.getElementById('valBank').value) || 0;
+            ves = bank * tBdv;
+            wally = bank / (1 + COMISION_BANCO);
+            binance = wally * FACTOR_WALLY_BINANCE;
+        } 
+        else if (source === 'wally') {
+            wally = parseFloat(document.getElementById('valWally').value) || 0;
+            bank = wally * (1 + COMISION_BANCO);
+            ves = bank * tBdv;
+            binance = wally * FACTOR_WALLY_BINANCE;
+        } 
+        else if (source === 'binance') {
+            binance = parseFloat(document.getElementById('valBinance').value) || 0;
+            wally = binance / FACTOR_WALLY_BINANCE;
+            bank = wally * (1 + COMISION_BANCO);
+            ves = bank * tBdv;
         }
+
+        // Actualizar campos (excepto el que se está escribiendo)
+        if (source !== 'ves') document.getElementById('valVes').value = ves.toFixed(2);
+        if (source !== 'bank') document.getElementById('valBank').value = bank.toFixed(2);
+        if (source !== 'wally') document.getElementById('valWally').value = wally.toFixed(2);
+        if (source !== 'binance') document.getElementById('valBinance').value = binance.toFixed(4);
+
+        // Cálculo de Ganancia
+        const retornoBs = binance * tP2p;
+        const ganancia = retornoBs - ves;
+        const pct = ves > 0 ? (ganancia / ves) * 100 : 0;
+
+        // UI de Ganancia
+        document.getElementById('resGanancia').innerText = (ganancia >= 0 ? '+ ' : '') + ganancia.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Bs';
+        document.getElementById('resPct').innerText = (ganancia >= 0 ? '+' : '') + pct.toFixed(2) + '%';
+        
+        const caja = document.getElementById('cajaResultado');
+        caja.className = 'result-box ' + (ves <= 0 ? '' : (ganancia >= 0 ? 'profit' : 'loss'));
     }
 </script>
 

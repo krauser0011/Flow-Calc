@@ -3,139 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consola de Arbitraje Profesional v4.0</title>
+    <title>ArbMaster v5.0 - Pro Console</title>
     <style>
         :root {
             --bg: #f4f7fa; --card: #ffffff; --text: #1e293b; --border: #e2e8f0;
             --bdv: #d32f2f; --wally: #6b21a8; --binance: #eab308; --success: #10b981;
+            --super: #06b6d4;
         }
         body.dark {
             --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; --border: #334155;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; transition: background 0.3s, color 0.3s; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; transition: 0.2s ease; }
         body { background: var(--bg); color: var(--text); padding: 15px; display: flex; flex-direction: column; align-items: center; }
         
-        .app { width: 100%; max-width: 480px; background: var(--card); padding: 25px; border-radius: 28px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border: 1px solid var(--border); }
-        
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .header h2 { font-size: 1.1rem; font-weight: 900; letter-spacing: 1px; color: var(--bdv); }
+        /* Dashboard de Ganancia Diaria */
+        .dash-hoy { width: 100%; max-width: 480px; background: var(--text); color: white; padding: 15px 20px; border-radius: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-bottom: 4px solid var(--success); }
+        .dash-hoy span { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; opacity: 0.7; }
+        .dash-hoy b { font-size: 1.3rem; font-weight: 900; color: var(--success); }
 
-        .section-title { font-size: 0.75rem; font-weight: 800; opacity: 0.6; letter-spacing: 1px; margin: 20px 0 10px 0; text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
-        
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .input-group { background: var(--bg); padding: 10px 15px; border-radius: 16px; border: 1px solid var(--border); }
-        .input-group label { display: block; font-size: 0.65rem; font-weight: 700; margin-bottom: 4px; }
-        .input-group input { width: 100%; background: transparent; border: none; outline: none; color: var(--text); font-size: 1.1rem; font-weight: 700; }
+        .app { width: 100%; max-width: 480px; background: var(--card); padding: 22px; border-radius: 30px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .header h2 { font-size: 1rem; font-weight: 900; color: var(--bdv); }
 
-        .step-box { margin-bottom: 10px; padding: 15px; border-radius: 18px; background: var(--bg); border-left: 6px solid; display: flex; justify-content: space-between; align-items: center; }
+        .section-title { font-size: 0.7rem; font-weight: 800; opacity: 0.5; letter-spacing: 1px; margin: 15px 0 8px 0; text-transform: uppercase; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .input-group { background: var(--bg); padding: 8px 12px; border-radius: 14px; border: 1px solid var(--border); }
+        .input-group label { display: block; font-size: 0.6rem; font-weight: 800; margin-bottom: 2px; }
+        .input-group input { width: 100%; background: transparent; border: none; outline: none; color: var(--text); font-size: 1rem; font-weight: 700; }
+
+        .step-box { margin-bottom: 8px; padding: 12px 16px; border-radius: 18px; background: var(--bg); border-left: 6px solid; display: flex; justify-content: space-between; align-items: center; }
         .step-box.bdv { border-color: var(--bdv); }
         .step-box.wally { border-color: var(--wally); }
         .step-box.binance { border-color: var(--binance); }
-        .step-box label { font-size: 0.8rem; font-weight: 800; display: flex; align-items: center; gap: 8px; }
-        .step-box input { background: transparent; border: none; outline: none; color: var(--text); font-size: 1.3rem; font-weight: 800; width: 60%; text-align: right; }
+        .step-box input { background: transparent; border: none; outline: none; color: var(--text); font-size: 1.2rem; font-weight: 800; width: 60%; text-align: right; }
 
-        .result-card { padding: 20px; border-radius: 20px; text-align: center; color: white; background: #64748b; margin-top: 10px; }
-        .result-card.profit { background: var(--success); box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); }
-        
-        /* Nueva tarjeta de reinversión */
-        .reinvest-area { background: #1e293b; color: white; padding: 20px; border-radius: 22px; margin-top: 20px; border: 2px solid var(--binance); }
-        .reinvest-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .reinvest-item { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 12px; border-left: 3px solid var(--binance); }
-        .reinvest-item span { display: block; font-size: 0.6rem; opacity: 0.8; font-weight: 700; margin-bottom: 2px; }
-        .reinvest-item b { font-size: 0.9rem; }
+        /* Semáforo de Rentabilidad */
+        .result-card { padding: 20px; border-radius: 22px; text-align: center; color: white; background: #64748b; margin-top: 10px; border: 2px solid transparent; }
+        .res-low { background: #10b981; } /* Verde normal */
+        .res-mid { background: #059669; box-shadow: 0 0 15px rgba(5, 150, 105, 0.4); border-color: #34d399; } /* Verde fuerte */
+        .res-high { background: #0891b2; box-shadow: 0 0 20px rgba(8, 145, 178, 0.5); border-color: #22d3ee; animation: pulse 2s infinite; } /* Cian Neón */
+        .res-loss { background: var(--bdv); }
 
-        .btn { width: 100%; padding: 16px; border-radius: 16px; border: none; font-weight: 800; cursor: pointer; margin-top: 15px; font-size: 0.9rem; }
-        .btn-save { background: var(--text); color: var(--card); }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.85; } 100% { opacity: 1; } }
+
+        .reinvest-area { background: #1e293b; color: white; padding: 18px; border-radius: 22px; margin-top: 15px; border: 2px solid var(--binance); }
+        .reinvest-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+        .reinvest-item { background: rgba(255,255,255,0.08); padding: 8px; border-radius: 10px; border-left: 3px solid var(--binance); }
+        .reinvest-item span { display: block; font-size: 0.55rem; opacity: 0.7; font-weight: 700; }
+        .reinvest-item b { font-size: 0.85rem; }
+
+        .btn-group { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-top: 15px; }
+        .btn { padding: 15px; border-radius: 16px; border: none; font-weight: 900; cursor: pointer; font-size: 0.8rem; text-transform: uppercase; }
+        .btn-clear { background: #e2e8f0; color: #64748b; }
+        .btn-save { background: var(--text); color: white; }
+        body.dark .btn-clear { background: #334155; color: #cbd5e1; }
+        body.dark .btn-save { background: white; color: black; }
         
-        .history { width: 100%; max-width: 480px; margin-top: 20px; background: var(--card); border-radius: 22px; padding: 20px; border: 1px solid var(--border); }
-        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-        th { text-align: left; padding: 10px; border-bottom: 2px solid var(--border); opacity: 0.6; }
-        td { padding: 12px 10px; border-bottom: 1px solid var(--border); }
+        .history { width: 100%; max-width: 480px; margin-top: 15px; background: var(--card); border-radius: 22px; padding: 18px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+        th { text-align: left; padding: 8px; opacity: 0.5; border-bottom: 1px solid var(--border); }
+        td { padding: 10px 8px; border-bottom: 1px solid var(--border); }
     </style>
 </head>
-<body class="">
+<body>
+
+<div class="dash-hoy">
+    <div><span>Acumulado Hoy</span><br><b id="totalHoy">0,00 Bs</b></div>
+    <div style="text-align: right;"><span>Ciclos</span><br><b id="countHoy">0</b></div>
+</div>
 
 <div class="app">
     <div class="header">
-        <h2>🏦 ARBITRAJE MASTER</h2>
-        <button onclick="document.body.classList.toggle('dark')" style="background:none; border:none; cursor:pointer; font-size:1.4rem;">🌓</button>
+        <h2>CONSOLE v5.0</h2>
+        <button onclick="document.body.classList.toggle('dark')" style="background:none; border:none; cursor:pointer; font-size:1.3rem;">🌓</button>
     </div>
 
-    <p class="section-title">⚙️ Ajustes de Mercado</p>
+    <p class="section-title">Ajustes de Mercado</p>
     <div class="grid">
-        <div class="input-group">
-            <label>Compra Banco (Bs)</label>
-            <input type="number" id="tasaBdv" value="0.00" oninput="recalc('ves')" onfocus="this.select()">
-        </div>
-        <div class="input-group">
-            <label>Venta P2P (Bs)</label>
-            <input type="number" id="tasaP2p" value="0.00" oninput="recalc('ves')" onfocus="this.select()">
-        </div>
-        <div class="input-group">
-            <label>Comisión Banco (%)</label>
-            <input type="number" id="pComision" value="6.36" oninput="recalc('ves')" onfocus="this.select()">
-        </div>
-        <div class="input-group">
-            <label>Factor Wally-Bin</label>
-            <input type="number" id="pFactor" value="0.9350" step="0.0001" oninput="recalc('ves')" onfocus="this.select()">
-        </div>
+        <div class="input-group"><label>Compra Banco</label><input type="number" id="tasaBdv" value="0.00" oninput="recalc('ves')" onfocus="this.select()"></div>
+        <div class="input-group"><label>Venta P2P</label><input type="number" id="tasaP2p" value="0.00" oninput="recalc('ves')" onfocus="this.select()"></div>
+        <div class="input-group"><label>Comisión %</label><input type="number" id="pComision" value="6.36" oninput="recalc('ves')" onfocus="this.select()"></div>
+        <div class="input-group"><label>Factor W-B</label><input type="number" id="pFactor" value="0.9350" step="0.0001" oninput="recalc('ves')" onfocus="this.select()"></div>
     </div>
 
-    <p class="section-title">💸 Flujo de Caja</p>
-    <div class="step-box bdv"><label>🔴 Bolívares</label><input type="number" id="valVes" oninput="recalc('ves')" onfocus="this.select()"></div>
-    <div class="step-box bdv"><label>💵 USD Banco</label><input type="number" id="valBank" oninput="recalc('bank')" onfocus="this.select()"></div>
-    <div class="step-box wally"><label>🟣 Wally Neto</label><input type="number" id="valWally" oninput="recalc('wally')" onfocus="this.select()"></div>
-    <div class="step-box binance"><label>🟡 Binance USDT</label><input type="number" id="valBinance" oninput="recalc('binance')" onfocus="this.select()"></div>
+    <p class="section-title">Flujo de Fondos</p>
+    <div class="step-box bdv"><label>🔴 Bs</label><input type="number" id="valVes" oninput="recalc('ves')" onfocus="this.select()"></div>
+    <div class="step-box bdv"><label>💵 USD</label><input type="number" id="valBank" oninput="recalc('bank')" onfocus="this.select()"></div>
+    <div class="step-box wally"><label>🟣 Wally</label><input type="number" id="valWally" oninput="recalc('wally')" onfocus="this.select()"></div>
+    <div class="step-box binance"><label>🟡 USDT</label><input type="number" id="valBinance" oninput="recalc('binance')" onfocus="this.select()"></div>
 
     <div class="result-card" id="caja">
-        <div style="font-size:0.7rem; font-weight:800; text-transform:uppercase; margin-bottom: 5px;">Ganancia Estimada</div>
-        <div id="resGanancia" style="font-size:1.8rem; font-weight:900;">0.00 Bs</div>
-        <div id="resPct" style="font-size:0.9rem; font-weight:700;">0.00%</div>
+        <div style="font-size:0.6rem; font-weight:800; text-transform:uppercase;">Ganancia Estimada</div>
+        <div id="resGanancia" style="font-size:1.7rem; font-weight:900;">0,00 Bs</div>
+        <div id="resPct" style="font-size:0.85rem; font-weight:700;">0.00%</div>
     </div>
 
-    <p class="section-title">🔄 Ciclo de Reinversión</p>
+    <p class="section-title">Reinversión USDT</p>
     <div class="reinvest-area">
-        <div class="input-group" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2);">
-            <label style="color: white;">USDT A VENDER PARA REINVERTIR</label>
-            <input type="number" id="reUSDT" value="0" oninput="recalc('reinvest')" onfocus="this.select()" style="color: white; font-size: 1.4rem;">
+        <div class="input-group" style="background:rgba(255,255,255,0.1); border:none;">
+            <label style="color:white; opacity:0.7">USDT A REINVERTIR</label>
+            <input type="number" id="reUSDT" value="0" oninput="recalc('reinvest')" onfocus="this.select()" style="color:white;">
         </div>
-        
         <div class="reinvest-grid">
-            <div class="reinvest-item">
-                <span>BS. RECIBIDOS</span>
-                <b id="reBsRecibidos">0.00 Bs</b>
-            </div>
-            <div class="reinvest-item">
-                <span>NUEVO USDT FINAL</span>
-                <b id="reUsdtNuevo">0.00 $</b>
-            </div>
-            <div class="reinvest-item" style="border-color: var(--success);">
-                <span>GANANCIA BS</span>
-                <b id="reGanBs" style="color: var(--success);">0.00 Bs</b>
-            </div>
-            <div class="reinvest-item" style="border-color: var(--success);">
-                <span>GANANCIA USDT</span>
-                <b id="reGanUsdt" style="color: var(--success);">0.00 $</b>
-            </div>
+            <div class="reinvest-item"><span>RECIBES Bs</span><b id="reBsRecibidos">0,00</b></div>
+            <div class="reinvest-item"><span>NUEVO USDT</span><b id="reUsdtNuevo">0,00</b></div>
+            <div class="reinvest-item"><span>GANANCIA Bs</span><b id="reGanBs">0,00</b></div>
+            <div class="reinvest-item"><span>GANANCIA $</span><b id="reGanUsdt">0,00</b></div>
         </div>
     </div>
 
-    <button class="btn btn-save" onclick="saveToHistory()">💾 GUARDAR EN HISTORIAL</button>
+    <div class="btn-group">
+        <button class="btn btn-clear" onclick="resetFlow()">Limpiar</button>
+        <button class="btn btn-save" onclick="saveToHistory()">Guardar</button>
+    </div>
 </div>
 
 <div class="history">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-        <h3 style="font-size:0.8rem; font-weight:800;">📝 REGISTROS</h3>
-        <button onclick="exportCSV()" style="font-size:0.7rem; font-weight:800; background:none; border:none; color:var(--bdv); cursor:pointer;">EXPORTAR EXCEL</button>
-    </div>
     <table id="historyTable">
-        <thead><tr><th>FECHA</th><th>INVERSIÓN</th><th>USDT</th><th>GANANCIA</th></tr></thead>
+        <thead><tr><th>FECHA</th><th>INVERTIDO</th><th>USDT</th><th>PROFIT</th></tr></thead>
         <tbody id="historyBody"></tbody>
     </table>
 </div>
 
 <script>
-    let history = JSON.parse(localStorage.getItem('arb_v40_data')) || [];
+    let history = JSON.parse(localStorage.getItem('arb_v50_data')) || [];
 
     function recalc(src) {
         const pCom = (parseFloat(document.getElementById('pComision').value) || 0) / 100;
@@ -145,7 +137,6 @@
 
         let ves = 0, bank = 0, wally = 0, bin = 0;
 
-        // Lógica de los 4 campos principales
         if(src === 'ves') {
             ves = parseFloat(document.getElementById('valVes').value) || 0;
             bank = tBdv > 0 ? ves / tBdv : 0;
@@ -168,77 +159,72 @@
             ves = bank * tBdv;
         }
 
-        // Actualizar valores de la flujo principal
-        if(src !== 'ves') document.getElementById('valVes').value = ves.toFixed(2);
-        if(src !== 'bank') document.getElementById('valBank').value = bank.toFixed(2);
-        if(src !== 'wally') document.getElementById('valWally').value = wally.toFixed(2);
-        if(src !== 'binance') document.getElementById('valBinance').value = bin.toFixed(4);
+        if(src !== 'ves' && src !== 'reinvest') document.getElementById('valVes').value = ves.toFixed(2);
+        if(src !== 'bank' && src !== 'reinvest') document.getElementById('valBank').value = bank.toFixed(2);
+        if(src !== 'wally' && src !== 'reinvest') document.getElementById('valWally').value = wally.toFixed(2);
+        if(src !== 'binance' && src !== 'reinvest') document.getElementById('valBinance').value = bin.toFixed(4);
 
-        // Ganancia de la sección principal
-        const gananciaBs = (bin * tP2p) - ves;
-        const pct = ves > 0 ? (gananciaBs / ves) * 100 : 0;
-        document.getElementById('resGanancia').innerText = gananciaBs.toLocaleString('es-VE',{minimumFractionDigits:2}) + ' Bs';
-        document.getElementById('resPct').innerText = (gananciaBs>=0?'+':'') + pct.toFixed(2) + '%';
-        document.getElementById('caja').className = 'result-card ' + (ves > 0 ? (gananciaBs >= 0 ? 'profit' : 'loss') : '');
+        const ganBs = (bin * tP2p) - ves;
+        const pct = ves > 0 ? (ganBs / ves) * 100 : 0;
+        
+        document.getElementById('resGanancia').innerText = ganBs.toLocaleString('es-VE',{minimumFractionDigits:2}) + ' Bs';
+        document.getElementById('resPct').innerText = (ganBs>=0?'+':'') + pct.toFixed(2) + '%';
+        
+        // Lógica del Semáforo
+        const caja = document.getElementById('caja');
+        caja.className = 'result-card';
+        if (ves > 0) {
+            if (pct <= 0) caja.classList.add('res-loss');
+            else if (pct < 1.0) caja.classList.add('res-low');
+            else if (pct < 2.5) caja.classList.add('res-mid');
+            else caja.classList.add('res-high');
+        }
 
-        // LÓGICA DE REINVERSIÓN (LA NUEVA TARJETA)
-        let usdtVenta = parseFloat(document.getElementById('reUSDT').value) || 0;
+        // Lógica Reinversión
+        let reUsdt = parseFloat(document.getElementById('reUSDT').value) || 0;
+        let reBs = reUsdt * tP2p;
+        let reBinNuevo = (tBdv > 0) ? ((reBs / tBdv) / (1 + pCom)) * pFac : 0;
+        let reGUsdt = reBinNuevo - reUsdt;
         
-        // 1. Convertir USDT a Bolívares (Venta P2P)
-        let bsObtenidos = usdtVenta * tP2p;
-        
-        // 2. Reinvertir esos Bs (Seguir el flujo: Bs -> Banco -> Wally -> Binance)
-        let usdBancoNuevo = tBdv > 0 ? bsObtenidos / tBdv : 0;
-        let wallyNuevo = usdBancoNuevo / (1 + pCom);
-        let usdtFinalNuevo = wallyNuevo * pFac;
-        
-        // 3. Ganancias netas de la reinversión
-        let ganNetaUsdt = usdtFinalNuevo - usdtVenta;
-        let ganNetaBs = ganNetaUsdt * tP2p;
+        document.getElementById('reBsRecibidos').innerText = reBs.toLocaleString('es-VE',{minimumFractionDigits:2}) + ' Bs';
+        document.getElementById('reUsdtNuevo').innerText = reBinNuevo.toFixed(4) + ' USDT';
+        document.getElementById('reGanBs').innerText = (reGUsdt * tP2p).toLocaleString('es-VE',{minimumFractionDigits:2}) + ' Bs';
+        document.getElementById('reGanUsdt').innerText = reGUsdt.toFixed(4) + ' $';
+    }
 
-        // Actualizar UI de Reinversión
-        document.getElementById('reBsRecibidos').innerText = bsObtenidos.toLocaleString('es-VE',{minimumFractionDigits:2}) + ' Bs';
-        document.getElementById('reUsdtNuevo').innerText = usdtFinalNuevo.toFixed(4) + ' USDT';
-        document.getElementById('reGanBs').innerText = ganNetaBs.toLocaleString('es-VE',{minimumFractionDigits:2}) + ' Bs';
-        document.getElementById('reGanUsdt').innerText = ganNetaUsdt.toFixed(4) + ' USDT';
+    function resetFlow() {
+        ['valVes','valBank','valWally','valBinance','reUSDT'].forEach(id => document.getElementById(id).value = '');
+        recalc('ves');
     }
 
     function saveToHistory() {
         const entry = {
             date: new Date().toLocaleDateString(),
             ves: document.getElementById('valVes').value,
-            usdt: document.getElementById('valBinance').value,
-            gan: document.getElementById('resGanancia').innerText
+            bin: document.getElementById('valBinance').value,
+            gan: parseFloat(document.getElementById('resGanancia').innerText.replace('.','').replace(',','.'))
         };
         history.unshift(entry);
-        if(history.length > 8) history.pop();
-        localStorage.setItem('arb_v40_data', JSON.stringify(history));
+        localStorage.setItem('arb_v50_data', JSON.stringify(history));
         renderHistory();
+        calculateDaily();
+    }
+
+    function calculateDaily() {
+        const today = new Date().toLocaleDateString();
+        const recordsToday = history.filter(h => h.date === today);
+        const total = recordsToday.reduce((sum, h) => sum + h.gan, 0);
+        document.getElementById('totalHoy').innerText = total.toLocaleString('es-VE',{minimumFractionDigits:2}) + ' Bs';
+        document.getElementById('countHoy').innerText = recordsToday.length;
     }
 
     function renderHistory() {
-        document.getElementById('historyBody').innerHTML = history.map(h => `
-            <tr>
-                <td>${h.date}</td>
-                <td>${h.ves}</td>
-                <td>${h.usdt}</td>
-                <td style="color:var(--success); font-weight:bold">${h.gan}</td>
-            </tr>
+        document.getElementById('historyBody').innerHTML = history.slice(0,10).map(h => `
+            <tr><td>${h.date}</td><td>${h.ves}</td><td>${h.bin}</td><td style="color:var(--success); font-weight:800">+${h.gan.toLocaleString('es-VE')}</td></tr>
         `).join('');
     }
 
-    function exportCSV() {
-        let csv = "Fecha,Inversion VES,USDT Binance,Ganancia Bs\n";
-        history.forEach(h => { csv += `${h.date},${h.ves},${h.usdt},"${h.gan}"\n`; });
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'historial_arbitraje.csv';
-        a.click();
-    }
-
-    window.onload = renderHistory;
+    window.onload = () => { renderHistory(); calculateDaily(); };
 </script>
 </body>
 </html>

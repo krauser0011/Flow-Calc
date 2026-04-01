@@ -3,45 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Master Arbitraje - BDV</title>
+    <title>Calculadora de Arbitraje Pro</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #0b0e11; color: #eaecef; padding: 10px; display: flex; justify-content: center; margin: 0; }
-        .container { background: #1e2329; padding: 20px; border-radius: 12px; width: 100%; max-width: 500px; border: 1px solid #333; box-shadow: 0 10px 25px rgba(0,0,0,0.8); }
-        h2 { color: #f3ba2f; text-align: center; font-size: 1.2em; margin: 0 0 15px 0; border-bottom: 2px solid #444; padding-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
-        
-        .section { background: #2b3139; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #3e4956; position: relative; }
-        .sec-title { position: absolute; top: -10px; left: 15px; background: #f3ba2f; color: #000; padding: 2px 8px; font-size: 0.75em; font-weight: bold; border-radius: 4px; text-transform: uppercase; }
-        
-        label { display: block; font-size: 0.85em; color: #848e9c; margin-bottom: 5px; font-weight: bold; }
-        input { width: 100%; padding: 12px; background: #121212; border: 1px solid #555; color: #00ff88; border-radius: 6px; font-size: 1.2em; font-weight: bold; box-sizing: border-box; outline: none; transition: 0.2s; }
-        input:focus { border-color: #f3ba2f; background: #1a1a1a; }
-        
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        
-        /* TABLERO DE INSTRUCCIONES */
-        .board { background: #121212; border: 2px solid #f3ba2f; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
-        .step { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed #333; }
-        .step:last-child { border-bottom: none; }
-        .step-num { background: #f3ba2f; color: #000; width: 22px; height: 22px; display: inline-flex; justify-content: center; align-items: center; border-radius: 50%; font-weight: bold; font-size: 0.8em; margin-right: 8px; }
-        .step-text { font-size: 0.9em; font-weight: bold; color: #ccc; flex-grow: 1; }
-        .step-val { font-size: 1.4em; font-weight: 900; color: #fff; }
-        .val-usd { color: #2979ff; }
-        .val-usdt { color: #00e676; }
+        /* VARIABLES DE TEMA */
+        :root {
+            --bg-body: #f5f7fa;
+            --bg-card: #ffffff;
+            --bg-input: #f0f2f5;
+            --text-main: #1e2329;
+            --text-muted: #5e6673;
+            --border: #dcdfe6;
+            --accent: #2979ff;
+            --accent-hover: #1c54b2;
+            --success: #00c853;
+            --success-bg: #e8f5e9;
+            --warning: #f3ba2f;
+            --danger: #ff5252;
+            --shadow: 0 8px 24px rgba(0,0,0,0.08);
+            --radius: 12px;
+            --transition: all 0.3s ease;
+        }
 
-        .profit-box { background: #004d40; border: 1px solid #00c853; border-radius: 8px; padding: 15px; text-align: center; }
-        .profit-title { font-size: 0.8em; color: #848e9c; font-weight: bold; margin-bottom: 5px; display: block; }
-        .profit-bs { font-size: 1.5em; font-weight: bold; color: #00ff88; display: block; }
-        .profit-usdt { font-size: 1em; color: #f3ba2f; font-weight: bold; }
+        [data-theme="dark"] {
+            --bg-body: #0b0e11;
+            --bg-card: #1e2329;
+            --bg-input: #121212;
+            --text-main: #eaecef;
+            --text-muted: #848e9c;
+            --border: #333333;
+            --accent: #2979ff;
+            --success: #00e676;
+            --success-bg: #004d40;
+            --warning: #f3ba2f;
+            --danger: #ff5555;
+            --shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+
+        /* ESTILOS GENERALES */
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background-color: var(--bg-body); 
+            color: var(--text-main); 
+            padding: 15px; 
+            display: flex; 
+            justify-content: center; 
+            margin: 0; 
+            transition: var(--transition);
+        }
+
+        .container { 
+            background: var(--bg-card); 
+            padding: 25px; 
+            border-radius: var(--radius); 
+            width: 100%; 
+            max-width: 480px; 
+            border: 1px solid var(--border); 
+            box-shadow: var(--shadow); 
+            transition: var(--transition);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 15px;
+        }
+
+        h2 { 
+            color: var(--warning); 
+            font-size: 1.25em; 
+            margin: 0; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+        }
+
+        .theme-btn {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: var(--transition);
+        }
+
+        .theme-btn:hover { background: var(--border); }
+
+        .section { 
+            background: var(--bg-body); 
+            padding: 18px; 
+            border-radius: var(--radius); 
+            margin-bottom: 18px; 
+            border: 1px solid var(--border); 
+            position: relative; 
+        }
+
+        .sec-title { 
+            position: absolute; 
+            top: -12px; 
+            left: 15px; 
+            background: var(--warning); 
+            color: #000; 
+            padding: 3px 10px; 
+            font-size: 0.75em; 
+            font-weight: bold; 
+            border-radius: 6px; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px;
+        }
+
+        label { 
+            display: block; 
+            font-size: 0.85em; 
+            color: var(--text-muted); 
+            margin-bottom: 6px; 
+            font-weight: 600; 
+        }
+
+        input { 
+            width: 100%; 
+            padding: 12px 15px; 
+            background: var(--bg-input); 
+            border: 1px solid var(--border); 
+            color: var(--text-main); 
+            border-radius: 8px; 
+            font-size: 1.15em; 
+            font-weight: bold; 
+            box-sizing: border-box; 
+            outline: none; 
+            transition: var(--transition); 
+        }
+
+        input:focus { 
+            border-color: var(--accent); 
+            box-shadow: 0 0 0 2px rgba(41, 121, 255, 0.2);
+        }
+
+        .grid-2 { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+        }
+
+        /* TABLERO DE INSTRUCCIONES */
+        .board { 
+            background: var(--bg-input); 
+            border: 2px solid var(--warning); 
+            border-radius: var(--radius); 
+            padding: 18px; 
+            margin-bottom: 18px; 
+        }
+
+        .step { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 12px 0; 
+            border-bottom: 1px dashed var(--border); 
+        }
+
+        .step:last-child { border-bottom: none; padding-bottom: 0; }
+        .step:first-child { padding-top: 0; }
+
+        .step-num { 
+            background: var(--warning); 
+            color: #000; 
+            width: 24px; 
+            height: 24px; 
+            display: inline-flex; 
+            justify-content: center; 
+            align-items: center; 
+            border-radius: 50%; 
+            font-weight: bold; 
+            font-size: 0.85em; 
+            margin-right: 10px; 
+        }
+
+        .step-text { 
+            font-size: 0.9em; 
+            font-weight: 600; 
+            color: var(--text-muted); 
+            flex-grow: 1; 
+        }
+
+        .step-val { 
+            font-size: 1.35em; 
+            font-weight: 800; 
+            color: var(--text-main); 
+        }
+
+        .val-usd { color: var(--accent); }
+        .val-usdt { color: var(--success); }
+
+        .profit-box { 
+            background: var(--success-bg); 
+            border: 1px solid var(--success); 
+            border-radius: var(--radius); 
+            padding: 18px; 
+            text-align: center; 
+        }
+
+        .profit-title { 
+            font-size: 0.8em; 
+            color: var(--text-main); 
+            font-weight: bold; 
+            margin-bottom: 8px; 
+            display: block; 
+            opacity: 0.8;
+        }
+
+        .profit-bs { 
+            font-size: 1.6em; 
+            font-weight: 800; 
+            color: var(--success); 
+            display: block; 
+        }
+
+        .profit-usdt { 
+            font-size: 1.1em; 
+            color: var(--warning); 
+            font-weight: 600; 
+            margin-top: 4px;
+            display: block;
+        }
+
+        .footer-note {
+            text-align: center; 
+            font-size: 0.75em; 
+            color: var(--text-muted); 
+            margin-top: 20px;
+        }
     </style>
 </head>
-<body>
+<body data-theme="dark">
 
 <div class="container">
-    <h2>Arbitraje Total: BDV ➔ Binance</h2>
+    <div class="header">
+        <h2>Control de Arbitraje</h2>
+        <button class="theme-btn" id="themeToggle" onclick="toggleTheme()">☀️ Día</button>
+    </div>
 
-    <div class="section" style="margin-top: 20px;">
-        <span class="sec-title" style="background: #848e9c; color: #fff;">1. Tasas del Día</span>
-        <div class="grid-2" style="margin-bottom: 10px;">
+    <div class="section" style="margin-top: 15px;">
+        <span class="sec-title" style="background: var(--text-muted); color: #fff;">1. Mercado y Tasas</span>
+        <div class="grid-2" style="margin-bottom: 12px;">
             <div>
                 <label>Tasa BDV (Bs/$)</label>
                 <input type="number" id="tasaB" value="550" oninput="calc('tasas')">
@@ -51,26 +258,32 @@
                 <input type="number" id="tasaP" value="580" oninput="calc('tasas')">
             </div>
         </div>
-        <div style="border-top: 1px solid #444; padding-top: 10px;">
-            <label style="color: #ff5555;">% Comisión BDV por comprar USD (Ajustable)</label>
-            <input type="number" id="feeCompraBdv" value="2.0" step="0.1" oninput="calc('tasas')" style="color: #ff5555; border-color: #ff5555; font-size: 1em; padding: 8px;">
+        <div class="grid-2" style="border-top: 1px solid var(--border); padding-top: 12px;">
+            <div>
+                <label style="color: var(--danger);">% Com. BDV Compra</label>
+                <input type="number" id="feeCompraBdv" value="2.0" step="0.1" oninput="calc('tasas')" style="color: var(--danger); border-color: var(--danger);">
+            </div>
+            <div>
+                <label style="color: var(--accent);">% Com. Tarjeta</label>
+                <input type="number" id="feeTarjeta" value="2.52" step="0.01" oninput="calc('tasas')" style="color: var(--accent); border-color: var(--accent);">
+            </div>
         </div>
     </div>
 
     <div class="section">
-        <span class="sec-title" style="background: #2979ff; color: #fff;">2. Reinversión (Opcional)</span>
+        <span class="sec-title" style="background: var(--accent); color: #fff;">2. Reinversión</span>
         <label>Tengo estos USDT en Binance para vender:</label>
         <input type="number" id="inReinvertir" placeholder="Ej: 150" oninput="calc('reinvertir')">
     </div>
 
     <div class="section">
-        <span class="sec-title">3. Calculadora Bidireccional</span>
-        <div style="margin-bottom: 10px;">
+        <span class="sec-title">3. Calculadora de Flujo</span>
+        <div style="margin-bottom: 12px;">
             <label>Capital Total en Bolívares (Bs):</label>
             <input type="number" id="inBs" placeholder="Ej: 93081.63" oninput="calc('bs')">
         </div>
         
-        <div class="grid-2" style="margin-bottom: 10px;">
+        <div class="grid-2" style="margin-bottom: 12px;">
             <div>
                 <label>USD en el Banco:</label>
                 <input type="number" id="inUsdBanco" oninput="calc('usdBanco')">
@@ -88,7 +301,9 @@
     </div>
 
     <div class="board">
-        <div style="text-align: center; font-size: 0.8em; color: #848e9c; margin-bottom: 10px; text-transform: uppercase; font-weight: bold;">Instrucciones para Saldo Cero</div>
+        <div style="text-align: center; font-size: 0.8em; color: var(--text-muted); margin-bottom: 15px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">
+            Acciones Exactas a Realizar
+        </div>
         
         <div class="step">
             <span class="step-num">1</span>
@@ -97,12 +312,12 @@
         </div>
         <div class="step">
             <span class="step-num">2</span>
-            <span class="step-text">Teclear en Binance (BPay):</span>
+            <span class="step-text">Teclear en BPay:</span>
             <span class="step-val val-usd" id="outTeclear">$0.00</span>
         </div>
         <div class="step">
             <span class="step-num">3</span>
-            <span class="step-text">Recibes Neto en Wallet:</span>
+            <span class="step-text">Recibes en Binance:</span>
             <span class="step-val val-usdt" id="outRecibes">0.00</span>
         </div>
     </div>
@@ -113,42 +328,53 @@
         <span class="profit-usdt" id="outGananciaUsdt">+0.00 USDT</span>
     </div>
 
-    <div style="text-align: center; font-size: 0.7em; color: #555; margin-top: 15px;">
-        Comisiones fijas aplicadas: Tarjeta BDV (2.511%) | Binance BPay (3.3%)
+    <div class="footer-note">
+        Comisión de recarga Binance BPay fija en 3.3%<br>
+        *Algoritmo de "Número Seguro" activado (-0.01$ en BPay)
     </div>
 </div>
 
 <script>
-    // Comisiones fijas comprobadas en tu historial
-    const FEE_TARJETA = 0.02511; 
-    const FEE_BPAY = 0.033;
+    // MANEJO DEL MODO DÍA/NOCHE
+    function toggleTheme() {
+        const body = document.body;
+        const btn = document.getElementById('themeToggle');
+        if (body.getAttribute('data-theme') === 'dark') {
+            body.removeAttribute('data-theme');
+            btn.innerText = '🌙 Noche';
+        } else {
+            body.setAttribute('data-theme', 'dark');
+            btn.innerText = '☀️ Día';
+        }
+    }
 
-    let ultimoOrigen = 'bs'; // Guarda cuál fue la última casilla que editaste
+    // LÓGICA DE LA CALCULADORA
+    const FEE_BPAY = 0.033;
+    let ultimoOrigen = 'bs'; 
 
     function calc(origen) {
         if (origen !== 'tasas') ultimoOrigen = origen;
-        else origen = ultimoOrigen; // Si cambias una tasa, recalcula basándose en la última entrada
+        else origen = ultimoOrigen; 
 
-        // Obtener tasas
         const tb = parseFloat(document.getElementById('tasaB').value) || 1;
         const tp = parseFloat(document.getElementById('tasaP').value) || 1;
-        const feeCompraBdv = (parseFloat(document.getElementById('feeCompraBdv').value) || 0) / 100; // Ej: 2.0 -> 0.02
+        const feeCompraBdv = (parseFloat(document.getElementById('feeCompraBdv').value) || 0) / 100;
+        const feeTarjeta = (parseFloat(document.getElementById('feeTarjeta').value) || 0) / 100;
 
         let bs = 0, usdBanco = 0, bpay = 0, usdt = 0;
 
-        // LÓGICA ESPEJO
+        // Reinversión (Inicia el ciclo desde USDT a Bs)
         if (origen === 'reinvertir') {
             const usdtInicial = parseFloat(document.getElementById('inReinvertir').value) || 0;
             bs = usdtInicial * tp;
             document.getElementById('inBs').value = bs.toFixed(2);
-            origen = 'bs'; // Al convertir USDT a Bs, el flujo continúa como si hubieras escrito Bs
+            origen = 'bs'; 
         }
 
         if (origen === 'bs') {
             bs = parseFloat(document.getElementById('inBs').value) || 0;
-            // Quitamos la comisión variable de compra (Ej: 2%)
             usdBanco = bs / (tb * (1 + feeCompraBdv));
-            bpay = usdBanco / (1 + FEE_TARJETA);
+            bpay = usdBanco / (1 + feeTarjeta);
             usdt = bpay * (1 - FEE_BPAY);
 
             document.getElementById('inUsdBanco').value = usdBanco.toFixed(2);
@@ -158,7 +384,13 @@
         else if (origen === 'usdBanco') {
             usdBanco = parseFloat(document.getElementById('inUsdBanco').value) || 0;
             bs = usdBanco * tb * (1 + feeCompraBdv);
-            bpay = usdBanco / (1 + FEE_TARJETA);
+            
+            // LÓGICA DE NÚMERO SEGURO:
+            // 1. Calcula exacto. 2. Trunca a 2 decimales. 3. Resta 0.01$
+            let rawBpay = usdBanco / (1 + feeTarjeta);
+            bpay = Math.floor(rawBpay * 100) / 100;
+            if (bpay > 0) bpay = bpay - 0.01; 
+            
             usdt = bpay * (1 - FEE_BPAY);
 
             document.getElementById('inBs').value = bs.toFixed(2);
@@ -167,7 +399,7 @@
         }
         else if (origen === 'bpay') {
             bpay = parseFloat(document.getElementById('inBpay').value) || 0;
-            usdBanco = bpay * (1 + FEE_TARJETA);
+            usdBanco = bpay * (1 + feeTarjeta);
             bs = usdBanco * tb * (1 + feeCompraBdv);
             usdt = bpay * (1 - FEE_BPAY);
 
@@ -178,7 +410,7 @@
         else if (origen === 'usdt') {
             usdt = parseFloat(document.getElementById('inUsdt').value) || 0;
             bpay = usdt / (1 - FEE_BPAY);
-            usdBanco = bpay * (1 + FEE_TARJETA);
+            usdBanco = bpay * (1 + feeTarjeta);
             bs = usdBanco * tb * (1 + feeCompraBdv);
 
             document.getElementById('inBs').value = bs.toFixed(2);
@@ -186,19 +418,23 @@
             document.getElementById('inBpay').value = bpay.toFixed(2);
         }
 
-        // ACTUALIZAR EL TABLERO DE INSTRUCCIONES
+        // ACTUALIZAR TABLERO
         document.getElementById('outComprar').innerText = "$" + usdBanco.toFixed(2);
         document.getElementById('outTeclear').innerText = "$" + bpay.toFixed(2);
         document.getElementById('outRecibes').innerText = usdt.toFixed(2) + " USDT";
 
-        // CÁLCULO DE GANANCIA
+        // CALCULAR GANANCIA
         const retornoBs = usdt * tp;
         const gananciaBs = retornoBs - bs;
         const gananciaUsdt = gananciaBs / tp;
 
-        document.getElementById('outGananciaBs').innerText = (gananciaBs >= 0 ? "+" : "") + gananciaBs.toLocaleString('es-VE', {minimumFractionDigits: 2}) + " Bs";
-        document.getElementById('outGananciaUsdt').innerText = (gananciaUsdt >= 0 ? "+" : "") + gananciaUsdt.toFixed(2) + " USDT";
-        document.getElementById('outGananciaBs').style.color = gananciaBs >= 0 ? "#00ff88" : "#ff5555";
+        const elGanBs = document.getElementById('outGananciaBs');
+        const elGanUsdt = document.getElementById('outGananciaUsdt');
+
+        elGanBs.innerText = (gananciaBs >= 0 ? "+" : "") + gananciaBs.toLocaleString('es-VE', {minimumFractionDigits: 2}) + " Bs";
+        elGanUsdt.innerText = (gananciaUsdt >= 0 ? "+" : "") + gananciaUsdt.toFixed(2) + " USDT";
+        
+        elGanBs.style.color = gananciaBs >= 0 ? "var(--success)" : "var(--danger)";
     }
 </script>
 

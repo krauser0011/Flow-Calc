@@ -321,7 +321,7 @@
         <div class="grid-2">
             <div>
                 <label for="inUsdBanco">COMPRAR AL BANCO USD</label>
-                <input type="number" id="inUsdBanco" step="1" min="10" placeholder="MÍNIMO 10" oninput="calc('usdBanco')">
+                <input type="number" id="inUsdBanco" step="0.01" min="10" placeholder="MÍNIMO 10 USD" oninput="calc('usdBanco')">
             </div>
             <div>
                 <label for="inBpay">A TECLEAR EN BPAY USD</label>
@@ -343,7 +343,7 @@
         <div class="step">
             <span class="step-num">01</span>
             <span class="step-text">COMPRAR EN EL BDV</span>
-            <span class="step-val" id="outComprar">0 USD</span> 
+            <span class="step-val" id="outComprar">0.00 USD</span> 
         </div>
         <div class="step">
             <span class="step-num">02</span>
@@ -365,7 +365,7 @@
 
     <div class="footer-note">
         * ALGORITMO DE NÚMERO SEGURO ACTIVADO -0.02 USD AL CALCULAR BPAY<br>
-        * COMPRA DE USD EN BANCO FORZADA A NÚMEROS ENTEROS MÍNIMO 10 USD<br>
+        * COMPRA EN BANCO MÍNIMO 10 USD PERMITE DECIMALES<br>
         NOTA: EL CÁLCULO DE GANANCIA ASUME EL COSTO TOTAL DE LOS BS GASTADOS
     </div>
 </div>
@@ -407,7 +407,8 @@
         if (origen === 'bs') {
             bs = Math.max(0, parseFloat(document.getElementById('inBs').value) || 0);
             let rawUsd = bs / (tb * (1 + feeCompraBdv));
-            usdBanco = Math.floor(rawUsd);
+            // Conserva decimales truncando a 2
+            usdBanco = Math.floor(rawUsd * 100) / 100;
             
             let rawBpay = usdBanco / (1 + feeTarjeta);
             bpay = Math.floor(rawBpay * 100) / 100;
@@ -415,7 +416,8 @@
             usdt = bpay * (1 - feeBpay);
         } 
         else if (origen === 'usdBanco') {
-            usdBanco = Math.max(0, parseInt(document.getElementById('inUsdBanco').value) || 0);
+            // Permitir parseFloat para recibir decimales
+            usdBanco = Math.max(0, parseFloat(document.getElementById('inUsdBanco').value) || 0);
             bs = usdBanco * tb * (1 + feeCompraBdv);
             
             let rawBpay = usdBanco / (1 + feeTarjeta);
@@ -426,7 +428,8 @@
         else if (origen === 'bpay') {
             bpay = Math.max(0, parseFloat(document.getElementById('inBpay').value) || 0);
             let rawUsd = bpay * (1 + feeTarjeta);
-            usdBanco = Math.ceil(rawUsd);
+            // Redondeo hacia arriba con 2 decimales para garantizar cobertura
+            usdBanco = Math.ceil(rawUsd * 100) / 100;
             if (usdBanco > 0 && usdBanco < 10) usdBanco = 10; 
             
             bs = usdBanco * tb * (1 + feeCompraBdv);
@@ -437,18 +440,20 @@
             bpay = usdt / (1 - feeBpay);
             
             let rawUsd = bpay * (1 + feeTarjeta);
-            usdBanco = Math.ceil(rawUsd); 
+            // Redondeo hacia arriba con 2 decimales para garantizar cobertura
+            usdBanco = Math.ceil(rawUsd * 100) / 100; 
             if (usdBanco > 0 && usdBanco < 10) usdBanco = 10; 
             
             bs = usdBanco * tb * (1 + feeCompraBdv);
         }
 
         if (origen !== 'bs') document.getElementById('inBs').value = bs > 0 ? bs.toFixed(2) : '';
-        if (origen !== 'usdBanco') document.getElementById('inUsdBanco').value = usdBanco > 0 ? usdBanco : '';
+        if (origen !== 'usdBanco') document.getElementById('inUsdBanco').value = usdBanco > 0 ? usdBanco.toFixed(2) : '';
         if (origen !== 'bpay') document.getElementById('inBpay').value = bpay > 0 ? bpay.toFixed(2) : '';
         if (origen !== 'usdt') document.getElementById('inUsdt').value = usdt > 0 ? usdt.toFixed(2) : '';
 
-        document.getElementById('outComprar').innerText = usdBanco + " USD";
+        // Formato a dos decimales en la vista de resultados
+        document.getElementById('outComprar').innerText = usdBanco.toFixed(2) + " USD";
         document.getElementById('outTeclear').innerText = bpay.toFixed(2) + " USD";
         document.getElementById('outRecibes').innerText = usdt.toFixed(2) + " USDT";
 

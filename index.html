@@ -148,6 +148,17 @@
             gap: 15px; 
         }
 
+        .grid-3 {
+            display: grid; 
+            grid-template-columns: 1fr 1fr 1fr; 
+            gap: 10px; 
+        }
+
+        .grid-3 input {
+            font-size: 1em;
+            padding: 10px 8px;
+        }
+
         /* TABLERO DE INSTRUCCIONES */
         .board { 
             background: var(--bg-input); 
@@ -235,6 +246,7 @@
             font-size: 0.75em; 
             color: var(--text-muted); 
             margin-top: 20px;
+            line-height: 1.5;
         }
     </style>
 </head>
@@ -250,53 +262,57 @@
         <span class="sec-title" style="background: var(--text-muted); color: #fff;">1. Mercado y Tasas</span>
         <div class="grid-2" style="margin-bottom: 12px;">
             <div>
-                <label>Tasa BDV (Bs/$)</label>
-                <input type="number" id="tasaB" value="550" oninput="calc('tasas')">
+                <label for="tasaB">Tasa BDV (Bs/$)</label>
+                <input type="number" id="tasaB" value="550" min="0" oninput="calc('tasas')">
             </div>
             <div>
-                <label>Venta P2P (Bs/USDT)</label>
-                <input type="number" id="tasaP" value="580" oninput="calc('tasas')">
+                <label for="tasaP">Venta P2P (Bs/USDT)</label>
+                <input type="number" id="tasaP" value="580" min="0" oninput="calc('tasas')">
             </div>
         </div>
-        <div class="grid-2" style="border-top: 1px solid var(--border); padding-top: 12px;">
+        <div class="grid-3" style="border-top: 1px solid var(--border); padding-top: 12px;">
             <div>
-                <label style="color: var(--danger);">% Com. BDV Compra</label>
-                <input type="number" id="feeCompraBdv" value="2.0" step="0.1" oninput="calc('tasas')" style="color: var(--danger); border-color: var(--danger);">
+                <label for="feeCompraBdv" style="color: var(--danger);">% Com. BDV</label>
+                <input type="number" id="feeCompraBdv" value="2.0" step="0.1" min="0" oninput="calc('tasas')" style="color: var(--danger); border-color: var(--danger);">
             </div>
             <div>
-                <label style="color: var(--accent);">% Com. Tarjeta</label>
-                <input type="number" id="feeTarjeta" value="2.52" step="0.01" oninput="calc('tasas')" style="color: var(--accent); border-color: var(--accent);">
+                <label for="feeTarjeta" style="color: var(--accent);">% Com. Tarj</label>
+                <input type="number" id="feeTarjeta" value="2.52" step="0.01" min="0" oninput="calc('tasas')" style="color: var(--accent); border-color: var(--accent);">
+            </div>
+            <div>
+                <label for="feeBpay" style="color: var(--warning);">% Com. BPay</label>
+                <input type="number" id="feeBpay" value="3.6" step="0.1" min="0" oninput="calc('tasas')" style="color: var(--warning); border-color: var(--warning);">
             </div>
         </div>
     </div>
 
     <div class="section">
         <span class="sec-title" style="background: var(--accent); color: #fff;">2. Reinversión</span>
-        <label>Tengo estos USDT en Binance para vender:</label>
-        <input type="number" id="inReinvertir" placeholder="Ej: 150" oninput="calc('reinvertir')">
+        <label for="inReinvertir">Tengo estos USDT en Binance para vender:</label>
+        <input type="number" id="inReinvertir" placeholder="Ej: 150" min="0" oninput="calc('reinvertir')">
     </div>
 
     <div class="section">
         <span class="sec-title">3. Calculadora de Flujo</span>
         <div style="margin-bottom: 12px;">
-            <label>Capital Total en Bolívares (Bs):</label>
-            <input type="number" id="inBs" placeholder="Ej: 93081.63" oninput="calc('bs')">
+            <label for="inBs">Capital Total a gastar en Bolívares (Bs):</label>
+            <input type="number" id="inBs" placeholder="Ej: 93081.63" min="0" oninput="calc('bs')">
         </div>
         
         <div class="grid-2" style="margin-bottom: 12px;">
             <div>
-                <label>USD en el Banco:</label>
-                <input type="number" id="inUsdBanco" oninput="calc('usdBanco')">
+                <label for="inUsdBanco">Comprar al Banco ($):</label>
+                <input type="number" id="inUsdBanco" step="1" min="10" placeholder="Mínimo $10" oninput="calc('usdBanco')">
             </div>
             <div>
-                <label>A teclear en BPay:</label>
-                <input type="number" id="inBpay" oninput="calc('bpay')">
+                <label for="inBpay">A teclear en BPay ($):</label>
+                <input type="number" id="inBpay" min="0" oninput="calc('bpay')">
             </div>
         </div>
         
         <div>
-            <label>Neto deseado en Binance (USDT):</label>
-            <input type="number" id="inUsdt" oninput="calc('usdt')">
+            <label for="inUsdt">Neto deseado en Binance (USDT):</label>
+            <input type="number" id="inUsdt" min="0" oninput="calc('usdt')">
         </div>
     </div>
 
@@ -308,7 +324,8 @@
         <div class="step">
             <span class="step-num">1</span>
             <span class="step-text">Comprar en el BDV:</span>
-            <span class="step-val" id="outComprar">$0.00</span>
+            <!-- Al ser entero, no requiere decimales -->
+            <span class="step-val" id="outComprar">$0</span> 
         </div>
         <div class="step">
             <span class="step-num">2</span>
@@ -329,8 +346,9 @@
     </div>
 
     <div class="footer-note">
-        Comisión de recarga Binance BPay fija en 3.3%<br>
-        *Algoritmo de "Número Seguro" activado (-0.01$ en BPay)
+        * Algoritmo de "Número Seguro" activado (-0.01$ al calcular BPay).<br>
+        * Compra de USD en banco forzada a números enteros (Mínimo $10).<br>
+        <em>Nota: El cálculo de ganancia asume el costo total de los Bs gastados.</em>
     </div>
 </div>
 
@@ -349,84 +367,87 @@
     }
 
     // LÓGICA DE LA CALCULADORA
-    const FEE_BPAY = 0.033;
     let ultimoOrigen = 'bs'; 
 
     function calc(origen) {
         if (origen !== 'tasas') ultimoOrigen = origen;
         else origen = ultimoOrigen; 
 
-        const tb = parseFloat(document.getElementById('tasaB').value) || 1;
-        const tp = parseFloat(document.getElementById('tasaP').value) || 1;
-        const feeCompraBdv = (parseFloat(document.getElementById('feeCompraBdv').value) || 0) / 100;
-        const feeTarjeta = (parseFloat(document.getElementById('feeTarjeta').value) || 0) / 100;
+        // Captura de variables del mercado asegurando que no sean negativas
+        const tb = Math.max(0, parseFloat(document.getElementById('tasaB').value) || 1);
+        const tp = Math.max(0, parseFloat(document.getElementById('tasaP').value) || 1);
+        const feeCompraBdv = Math.max(0, parseFloat(document.getElementById('feeCompraBdv').value) || 0) / 100;
+        const feeTarjeta = Math.max(0, parseFloat(document.getElementById('feeTarjeta').value) || 0) / 100;
+        const feeBpay = Math.max(0, parseFloat(document.getElementById('feeBpay').value) || 0) / 100;
 
         let bs = 0, usdBanco = 0, bpay = 0, usdt = 0;
 
         // Reinversión (Inicia el ciclo desde USDT a Bs)
         if (origen === 'reinvertir') {
-            const usdtInicial = parseFloat(document.getElementById('inReinvertir').value) || 0;
+            const usdtInicial = Math.max(0, parseFloat(document.getElementById('inReinvertir').value) || 0);
             bs = usdtInicial * tp;
-            document.getElementById('inBs').value = bs.toFixed(2);
             origen = 'bs'; 
         }
 
+        // Lógica de cálculo unificada
         if (origen === 'bs') {
-            bs = parseFloat(document.getElementById('inBs').value) || 0;
-            usdBanco = bs / (tb * (1 + feeCompraBdv));
-            bpay = usdBanco / (1 + feeTarjeta);
-            usdt = bpay * (1 - FEE_BPAY);
-
-            document.getElementById('inUsdBanco').value = usdBanco.toFixed(2);
-            document.getElementById('inBpay').value = bpay.toFixed(2);
-            document.getElementById('inUsdt').value = usdt.toFixed(2);
-        } 
-        else if (origen === 'usdBanco') {
-            usdBanco = parseFloat(document.getElementById('inUsdBanco').value) || 0;
-            bs = usdBanco * tb * (1 + feeCompraBdv);
+            bs = Math.max(0, parseFloat(document.getElementById('inBs').value) || 0);
+            let rawUsd = bs / (tb * (1 + feeCompraBdv));
+            // Obliga a comprar enteros (floor, porque solo tienes esos Bs)
+            usdBanco = Math.floor(rawUsd);
             
-            // LÓGICA DE NÚMERO SEGURO:
-            // 1. Calcula exacto. 2. Trunca a 2 decimales. 3. Resta 0.01$
             let rawBpay = usdBanco / (1 + feeTarjeta);
             bpay = Math.floor(rawBpay * 100) / 100;
-            if (bpay > 0) bpay = bpay - 0.01; 
+            if (bpay > 0) bpay = Math.max(0, bpay - 0.01);
+            usdt = bpay * (1 - feeBpay);
+        } 
+        else if (origen === 'usdBanco') {
+            // Fuerza enteros y permite simular, aunque advierte del mínimo 10 visualmente
+            usdBanco = Math.max(0, parseInt(document.getElementById('inUsdBanco').value) || 0);
+            bs = usdBanco * tb * (1 + feeCompraBdv);
             
-            usdt = bpay * (1 - FEE_BPAY);
-
-            document.getElementById('inBs').value = bs.toFixed(2);
-            document.getElementById('inBpay').value = bpay.toFixed(2);
-            document.getElementById('inUsdt').value = usdt.toFixed(2);
+            let rawBpay = usdBanco / (1 + feeTarjeta);
+            bpay = Math.floor(rawBpay * 100) / 100;
+            if (bpay > 0) bpay = Math.max(0, bpay - 0.01); 
+            usdt = bpay * (1 - feeBpay);
         }
         else if (origen === 'bpay') {
-            bpay = parseFloat(document.getElementById('inBpay').value) || 0;
-            usdBanco = bpay * (1 + feeTarjeta);
+            bpay = Math.max(0, parseFloat(document.getElementById('inBpay').value) || 0);
+            let rawUsd = bpay * (1 + feeTarjeta);
+            // Si calculas desde Bpay, DEBES tener suficiente en el banco (Entero superior)
+            usdBanco = Math.ceil(rawUsd);
+            if (usdBanco > 0 && usdBanco < 10) usdBanco = 10; // Regla del mínimo $10
+            
             bs = usdBanco * tb * (1 + feeCompraBdv);
-            usdt = bpay * (1 - FEE_BPAY);
-
-            document.getElementById('inBs').value = bs.toFixed(2);
-            document.getElementById('inUsdBanco').value = usdBanco.toFixed(2);
-            document.getElementById('inUsdt').value = usdt.toFixed(2);
+            usdt = bpay * (1 - feeBpay);
         }
         else if (origen === 'usdt') {
-            usdt = parseFloat(document.getElementById('inUsdt').value) || 0;
-            bpay = usdt / (1 - FEE_BPAY);
-            usdBanco = bpay * (1 + feeTarjeta);
+            usdt = Math.max(0, parseFloat(document.getElementById('inUsdt').value) || 0);
+            bpay = usdt / (1 - feeBpay);
+            
+            let rawUsd = bpay * (1 + feeTarjeta);
+            usdBanco = Math.ceil(rawUsd); // Entero superior para cubrir
+            if (usdBanco > 0 && usdBanco < 10) usdBanco = 10; // Regla del mínimo $10
+            
             bs = usdBanco * tb * (1 + feeCompraBdv);
-
-            document.getElementById('inBs').value = bs.toFixed(2);
-            document.getElementById('inUsdBanco').value = usdBanco.toFixed(2);
-            document.getElementById('inBpay').value = bpay.toFixed(2);
         }
 
-        // ACTUALIZAR TABLERO
-        document.getElementById('outComprar').innerText = "$" + usdBanco.toFixed(2);
+        // ACTUALIZACIÓN DRY DEL DOM (No actualiza el campo que el usuario está editando)
+        if (origen !== 'bs') document.getElementById('inBs').value = bs > 0 ? bs.toFixed(2) : '';
+        if (origen !== 'usdBanco') document.getElementById('inUsdBanco').value = usdBanco > 0 ? usdBanco : '';
+        if (origen !== 'bpay') document.getElementById('inBpay').value = bpay > 0 ? bpay.toFixed(2) : '';
+        if (origen !== 'usdt') document.getElementById('inUsdt').value = usdt > 0 ? usdt.toFixed(2) : '';
+
+        // ACTUALIZAR TABLERO DE INSTRUCCIONES
+        document.getElementById('outComprar').innerText = "$" + usdBanco;
         document.getElementById('outTeclear').innerText = "$" + bpay.toFixed(2);
         document.getElementById('outRecibes').innerText = usdt.toFixed(2) + " USDT";
 
         // CALCULAR GANANCIA
         const retornoBs = usdt * tp;
-        const gananciaBs = retornoBs - bs;
-        const gananciaUsdt = gananciaBs / tp;
+        // La ganancia asume el gasto TOTAL en Bolívares (aunque sobren centavos de USD en el banco)
+        const gananciaBs = (usdt > 0) ? (retornoBs - bs) : 0;
+        const gananciaUsdt = (usdt > 0) ? (gananciaBs / tp) : 0;
 
         const elGanBs = document.getElementById('outGananciaBs');
         const elGanUsdt = document.getElementById('outGananciaUsdt');

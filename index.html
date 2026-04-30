@@ -386,6 +386,10 @@
         if (origen === 'reinvertir') {
             const usdtInicial = Math.max(0, parseFloat(document.getElementById('inReinvertir').value) || 0);
             bs = usdtInicial * tp;
+            
+            // Reparación: Inyectamos el cálculo al input antes de que el siguiente bloque lo lea
+            document.getElementById('inBs').value = bs > 0 ? bs.toFixed(2) : '';
+            
             origen = 'bs'; 
         }
 

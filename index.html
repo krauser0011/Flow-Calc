@@ -28,7 +28,7 @@
         }
 
         [data-theme="dark"] {
-            /* MODO OSCURO SUAVE TIPO PIZARRA (NO NEGRO PURO) */
+            /* MODO OSCURO SUAVE TIPO PIZARRA */
             --bg-body: #212529;
             --bg-card: #2b3035;
             --bg-input: #343a40;
@@ -173,7 +173,6 @@
             text-align: center;
         }
 
-        /* COLORES DE INDICADORES EN INPUTS */
         .input-danger:focus { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(255, 135, 135, 0.15); }
         .input-warning:focus { border-color: var(--warning); box-shadow: 0 0 0 3px rgba(252, 196, 25, 0.15); }
 
@@ -282,7 +281,8 @@
         <div class="grid-2">
             <div>
                 <label for="tasaB">TASA BDV BS/USD</label>
-                <input type="number" id="tasaB" value="570.75" min="0" oninput="calc('tasas')">
+                <!-- AQUI SE ACTUALIZO LA TASA REAL DEL BANCO A 602.01 -->
+                <input type="number" id="tasaB" value="602.01" min="0" oninput="calc('tasas')">
             </div>
             <div>
                 <label for="tasaP">VENTA P2P BS/USDT</label>
@@ -407,7 +407,6 @@
         if (origen === 'bs') {
             bs = Math.max(0, parseFloat(document.getElementById('inBs').value) || 0);
             let rawUsd = bs / (tb * (1 + feeCompraBdv));
-            // Conserva decimales truncando a 2
             usdBanco = Math.floor(rawUsd * 100) / 100;
             
             let rawBpay = usdBanco / (1 + feeTarjeta);
@@ -416,7 +415,6 @@
             usdt = bpay * (1 - feeBpay);
         } 
         else if (origen === 'usdBanco') {
-            // Permitir parseFloat para recibir decimales
             usdBanco = Math.max(0, parseFloat(document.getElementById('inUsdBanco').value) || 0);
             bs = usdBanco * tb * (1 + feeCompraBdv);
             
@@ -428,7 +426,6 @@
         else if (origen === 'bpay') {
             bpay = Math.max(0, parseFloat(document.getElementById('inBpay').value) || 0);
             let rawUsd = bpay * (1 + feeTarjeta);
-            // Redondeo hacia arriba con 2 decimales para garantizar cobertura
             usdBanco = Math.ceil(rawUsd * 100) / 100;
             if (usdBanco > 0 && usdBanco < 10) usdBanco = 10; 
             
@@ -440,7 +437,6 @@
             bpay = usdt / (1 - feeBpay);
             
             let rawUsd = bpay * (1 + feeTarjeta);
-            // Redondeo hacia arriba con 2 decimales para garantizar cobertura
             usdBanco = Math.ceil(rawUsd * 100) / 100; 
             if (usdBanco > 0 && usdBanco < 10) usdBanco = 10; 
             
@@ -452,7 +448,6 @@
         if (origen !== 'bpay') document.getElementById('inBpay').value = bpay > 0 ? bpay.toFixed(2) : '';
         if (origen !== 'usdt') document.getElementById('inUsdt').value = usdt > 0 ? usdt.toFixed(2) : '';
 
-        // Formato a dos decimales en la vista de resultados
         document.getElementById('outComprar').innerText = usdBanco.toFixed(2) + " USD";
         document.getElementById('outTeclear').innerText = bpay.toFixed(2) + " USD";
         document.getElementById('outRecibes').innerText = usdt.toFixed(2) + " USDT";

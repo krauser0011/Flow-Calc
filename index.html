@@ -3,128 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CALCULADORA DE ARBITRAJE PRO</title>
+    <title>Calculadora de Arbitraje Pro</title>
+    
+    <!-- FUENTES E ÍCONOS (Google Fonts) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,600,0,0" rel="stylesheet" />
+
     <style>
         /* VARIABLES DE TEMA MINIMALISTA Y ELEGANTE */
         :root {
-            /* MODO CLARO SUAVE */
-            --bg-body: #f8f9fa;
+            /* MODO CLARO - Degradado suave de fondo */
+            --bg-body-1: #f0f4f8;
+            --bg-body-2: #e2e8f0;
             --bg-card: #ffffff;
-            --bg-input: #f1f3f5;
-            --text-main: #343a40;
-            --text-muted: #868e96;
-            --border: #e9ecef;
+            --bg-input: #f8fafc;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
             
-            /* COLORES PASTEL / SUAVES */
-            --accent: #5c7cfa;
-            --success: #20c997;
-            --success-bg: #e6fcf5;
-            --warning: #fcc419;
-            --danger: #ff8787;
+            /* COLORES DE ACENTO */
+            --accent: #6366f1; /* Indigo suave */
+            --accent-hover: #4f46e5;
+            --success: #10b981; /* Esmeralda */
+            --success-bg: #ecfdf5;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --danger-bg: #fef2f2;
             
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-            --radius: 16px;
-            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.05), 0 8px 10px -4px rgba(0, 0, 0, 0.02);
+            --radius: 20px;
+            --transition: all 0.3s ease;
         }
 
         [data-theme="dark"] {
-            /* MODO OSCURO SUAVE TIPO PIZARRA */
-            --bg-body: #212529;
-            --bg-card: #2b3035;
-            --bg-input: #343a40;
-            --text-main: #f8f9fa;
-            --text-muted: #adb5bd;
-            --border: #495057;
+            /* MODO OSCURO - Tonos pizarra y azul noche */
+            --bg-body-1: #0f172a;
+            --bg-body-2: #020617;
+            --bg-card: #1e293b;
+            --bg-input: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
             
-            --accent: #748ffc;
-            --success: #38d9a9;
-            --success-bg: #21332e;
-            --warning: #fcc419;
-            --danger: #ffa8a8;
+            --accent: #818cf8;
+            --success: #34d399;
+            --success-bg: #064e3b;
+            --danger: #f87171;
+            --danger-bg: #450a0a;
             
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.5);
         }
 
         /* ESTILOS GENERALES */
         body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            background-color: var(--bg-body); 
+            font-family: 'Inter', sans-serif; 
+            background: radial-gradient(circle at top left, var(--bg-body-1), var(--bg-body-2));
             color: var(--text-main); 
-            padding: 20px 15px; 
+            padding: 30px 15px; 
             display: flex; 
             justify-content: center; 
             margin: 0; 
-            transition: var(--transition);
-            line-height: 1.5;
-        }
-
-        .container { 
-            background: var(--bg-card); 
-            padding: 30px; 
-            border-radius: var(--radius); 
-            width: 100%; 
-            max-width: 500px; 
-            border: 1px solid var(--border); 
-            box-shadow: var(--shadow); 
+            min-height: 100vh;
             transition: var(--transition);
         }
 
+        .app-container {
+            width: 100%;
+            max-width: 1000px; /* Ensanchado para aprovechar los lados */
+        }
+
+        /* HEADER */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border);
+            margin-bottom: 30px;
         }
 
-        h2 { 
-            color: var(--text-main); 
-            font-size: 1.1em; 
-            margin: 0; 
-            text-transform: uppercase; 
-            letter-spacing: 1.5px; 
-            font-weight: 700;
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2em;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: var(--text-main);
         }
+
+        .logo i { color: var(--accent); font-size: 1.4em; }
 
         .theme-btn {
-            background: var(--bg-input);
-            border: none;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
             color: var(--text-main);
             padding: 8px 16px;
             border-radius: 30px;
             cursor: pointer;
             font-size: 0.85em;
-            font-weight: 600;
-            letter-spacing: 1px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+        .theme-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+        /* GRID LAYOUT PRINCIPAL */
+        .layout-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        @media (min-width: 850px) {
+            .layout-grid {
+                grid-template-columns: 1.2fr 1fr; /* 2 Columnas en PC */
+                align-items: start;
+            }
+        }
+
+        /* TARJETAS / PANELES */
+        .card { 
+            background: var(--bg-card); 
+            padding: 25px; 
+            border-radius: var(--radius); 
+            border: 1px solid var(--border); 
+            box-shadow: var(--shadow-lg); 
+            margin-bottom: 25px;
             transition: var(--transition);
         }
 
-        .theme-btn:hover { 
-            background: var(--border); 
-            transform: translateY(-2px);
-        }
-
-        .section { 
-            margin-bottom: 25px; 
-        }
-
         .sec-title { 
-            display: block;
-            font-size: 0.75em; 
-            font-weight: 700; 
-            color: var(--text-muted); 
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8em; 
+            font-weight: 800; 
+            color: var(--accent); 
             text-transform: uppercase; 
-            letter-spacing: 1.5px;
-            margin-bottom: 15px;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
         }
+        .sec-title i { font-size: 1.4em; }
 
         label { 
             display: block; 
             font-size: 0.75em; 
             color: var(--text-muted); 
             margin-bottom: 8px; 
-            font-weight: 600; 
+            font-weight: 700; 
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -133,10 +166,11 @@
             width: 100%; 
             padding: 14px 16px; 
             background: var(--bg-input); 
-            border: 1px solid transparent; 
+            border: 1px solid var(--border); 
             color: var(--text-main); 
-            border-radius: 10px; 
+            border-radius: 12px; 
             font-size: 1.1em; 
+            font-family: 'Inter', sans-serif;
             font-weight: 600; 
             box-sizing: border-box; 
             outline: none; 
@@ -146,64 +180,40 @@
         input:focus { 
             background: var(--bg-card);
             border-color: var(--accent); 
-            box-shadow: 0 0 0 3px rgba(92, 124, 250, 0.15);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
         }
 
-        input::placeholder {
-            color: var(--text-muted);
-            opacity: 0.6;
-        }
+        input::placeholder { color: var(--text-muted); opacity: 0.5; }
 
-        .grid-2 { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 15px; 
-            margin-bottom: 15px;
-        }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+        .grid-3 input { font-size: 1em; padding: 12px 10px; text-align: center; }
 
-        .grid-3 {
-            display: grid; 
-            grid-template-columns: 1fr 1fr 1fr; 
-            gap: 12px; 
-        }
-
-        .grid-3 input {
-            font-size: 0.95em;
-            padding: 12px 10px;
-            text-align: center;
-        }
-
-        .input-danger:focus { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(255, 135, 135, 0.15); }
-        .input-warning:focus { border-color: var(--warning); box-shadow: 0 0 0 3px rgba(252, 196, 25, 0.15); }
-        .input-success:focus { border-color: var(--success); box-shadow: 0 0 0 3px rgba(32, 201, 151, 0.15); }
+        .input-danger:focus { border-color: var(--danger); box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15); }
+        .input-warning:focus { border-color: var(--warning); box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.15); }
+        .input-success:focus { border-color: var(--success); box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15); }
 
         /* TABLERO DE INSTRUCCIONES */
-        .board { 
-            background: var(--bg-card); 
-            border: 1px solid var(--border); 
-            border-radius: var(--radius); 
-            padding: 20px; 
-            margin-bottom: 25px; 
-            box-shadow: var(--shadow);
-        }
-
         .step { 
             display: flex; 
-            justify-content: space-between; 
             align-items: center; 
-            padding: 15px 0; 
-            border-bottom: 1px solid var(--border); 
+            padding: 16px 0; 
+            border-bottom: 1px dashed var(--border); 
         }
-
         .step:last-child { border-bottom: none; padding-bottom: 0; }
         .step:first-child { padding-top: 0; }
 
-        .step-num { 
-            color: var(--accent); 
-            font-weight: 800; 
-            font-size: 1.1em; 
-            margin-right: 15px; 
-            opacity: 0.5;
+        .step-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: var(--bg-input);
+            color: var(--accent);
+            border-radius: 10px;
+            margin-right: 15px;
+            border: 1px solid var(--border);
         }
 
         .step-text { 
@@ -212,183 +222,219 @@
             color: var(--text-muted); 
             flex-grow: 1; 
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .step-val { 
             font-size: 1.25em; 
-            font-weight: 700; 
+            font-weight: 800; 
             color: var(--text-main); 
         }
-
         .val-usdt { color: var(--success); }
 
+        /* CAJA DE GANANCIA */
         .profit-box { 
-            background: var(--success-bg); 
+            background: linear-gradient(135deg, var(--success-bg), var(--bg-card)); 
             border-radius: var(--radius); 
-            padding: 25px; 
+            padding: 30px 20px; 
             text-align: center; 
+            border: 1px solid var(--success);
             transition: var(--transition);
         }
 
         .profit-title { 
-            font-size: 0.75em; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 0.8em; 
             color: var(--success); 
             font-weight: 800; 
-            margin-bottom: 10px; 
-            display: block; 
+            margin-bottom: 15px; 
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
 
         .profit-bs { 
-            font-size: 2em; 
+            font-size: 2.5em; 
             font-weight: 800; 
             color: var(--text-main); 
             display: block; 
-            line-height: 1.1;
+            line-height: 1;
         }
 
         .profit-usdt { 
             font-size: 1.1em; 
             color: var(--success); 
             font-weight: 700; 
-            margin-top: 8px;
-            display: block;
+            margin-top: 10px;
+            display: inline-block;
+            background: var(--bg-card);
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        /* SOBRANTE BANCO */
+        .sobrante-panel {
+            background: var(--bg-input); 
+            padding: 16px; 
+            border-radius: 12px; 
+            border-left: 4px solid var(--success);
+            margin-bottom: 20px;
         }
 
         .footer-note {
             text-align: center; 
-            font-size: 0.65em; 
+            font-size: 0.7em; 
             color: var(--text-muted); 
-            margin-top: 25px;
+            margin-top: 15px;
             line-height: 1.8;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
             font-weight: 600;
         }
     </style>
 </head>
 <body data-theme="dark">
 
-<div class="container">
+<div class="app-container">
     <div class="header">
-        <h2>CONTROL DE ARBITRAJE</h2>
-        <button class="theme-btn" id="themeToggle" onclick="toggleTheme()">☀️ DÍA</button>
+        <div class="logo">
+            <i class="material-symbols-rounded">currency_exchange</i>
+            ARBITRAJE PRO
+        </div>
+        <button class="theme-btn" id="themeToggle" onclick="toggleTheme()">
+            <i class="material-symbols-rounded" id="themeIcon">light_mode</i> 
+            <span id="themeText">DÍA</span>
+        </button>
     </div>
 
-    <div class="section">
-        <span class="sec-title">1. MERCADO Y TASAS</span>
-        <div class="grid-2">
-            <div>
-                <label for="tasaB">TASA BDV BS/USD</label>
-                <input type="number" id="tasaB" value="611" min="0" oninput="calc('tasas')">
+    <div class="layout-grid">
+        <!-- COLUMNA IZQUIERDA: CONTROLES -->
+        <div class="left-col">
+            
+            <div class="card">
+                <span class="sec-title"><i class="material-symbols-rounded">monitoring</i> MERCADO Y TASAS</span>
+                <div class="grid-2">
+                    <div>
+                        <label for="tasaB">TASA BDV (BS/USD)</label>
+                        <input type="number" id="tasaB" value="611" min="0" oninput="calc('tasas')">
+                    </div>
+                    <div>
+                        <label for="tasaP">VENTA P2P (BS/USDT)</label>
+                        <input type="number" id="tasaP" value="630" min="0" oninput="calc('tasas')">
+                    </div>
+                </div>
+                <div class="grid-3">
+                    <div>
+                        <label for="feeCompraBdv">% COM. BDV</label>
+                        <input type="number" id="feeCompraBdv" class="input-danger" value="0.5" step="0.1" min="0" oninput="calc('tasas')">
+                    </div>
+                    <div>
+                        <label for="feeTarjeta">% COM. TARJ</label>
+                        <input type="number" id="feeTarjeta" value="2.52" step="0.01" min="0" oninput="calc('tasas')">
+                    </div>
+                    <div>
+                        <label for="feeBpay">% COM. BPAY</label>
+                        <input type="number" id="feeBpay" class="input-warning" value="3.6" step="0.1" min="0" oninput="calc('tasas')">
+                    </div>
+                </div>
             </div>
-            <div>
-                <label for="tasaP">VENTA P2P BS/USDT</label>
-                <input type="number" id="tasaP" value="630" min="0" oninput="calc('tasas')">
-            </div>
-        </div>
-        <div class="grid-3">
-            <div>
-                <label for="feeCompraBdv">% COM. BDV</label>
-                <input type="number" id="feeCompraBdv" class="input-danger" value="0.5" step="0.1" min="0" oninput="calc('tasas')">
-            </div>
-            <div>
-                <label for="feeTarjeta">% COM. TARJ</label>
-                <input type="number" id="feeTarjeta" value="2.52" step="0.01" min="0" oninput="calc('tasas')">
-            </div>
-            <div>
-                <label for="feeBpay">% COM. BPAY</label>
-                <input type="number" id="feeBpay" class="input-warning" value="3.6" step="0.1" min="0" oninput="calc('tasas')">
-            </div>
-        </div>
-    </div>
 
-    <div class="section">
-        <span class="sec-title">2. REINVERSIÓN</span>
-        <label for="inReinvertir">USDT EN BINANCE PARA VENDER</label>
-        <input type="number" id="inReinvertir" placeholder="EJ: 150" min="0" oninput="calc('reinvertir')">
-    </div>
+            <div class="card">
+                <span class="sec-title"><i class="material-symbols-rounded">calculate</i> CALCULADORA DE FLUJO</span>
+                
+                <!-- Panel de Sobrante Destacado -->
+                <div class="sobrante-panel">
+                    <label for="inSaldo" style="color: var(--success); margin-bottom: 5px;">SALDO EN TU BANCO BS (OPCIONAL)</label>
+                    <input type="number" id="inSaldo" class="input-success" placeholder="EJ: 372000" min="0" oninput="calc('saldo')" style="background: var(--bg-card); border-color: transparent; margin-bottom: 8px;">
+                    <div style="text-align: right; font-size: 0.75em; font-weight: 700;">
+                        SOBRANTE EN CUENTA: <span id="outSobrante" style="color: var(--text-muted);">0.00 BS</span>
+                    </div>
+                </div>
 
-    <div class="section">
-        <span class="sec-title">3. CALCULADORA DE FLUJO</span>
-        
-        <div style="margin-bottom: 20px; background: var(--bg-card); padding: 15px; border-radius: 10px; border: 1px dashed var(--success);">
-            <label for="inSaldo" style="color: var(--success);">SALDO TOTAL EN TU BANCO BS (OPCIONAL)</label>
-            <input type="number" id="inSaldo" class="input-success" placeholder="EJ: 372000" min="0" oninput="calc('saldo')" style="border-bottom: 2px solid var(--success);">
-            <div style="text-align: right; font-size: 0.75em; font-weight: 700; margin-top: 10px;">
-                SOBRANTE EN CUENTA: <span id="outSobrante" style="color: var(--text-muted);">0.00 BS</span>
+                <div style="margin-bottom: 15px;">
+                    <label for="inBs">COSTO DE LA OPERACIÓN BS</label>
+                    <input type="number" id="inBs" placeholder="EJ: 370889.22" min="0" oninput="calc('bs')">
+                </div>
+                
+                <div class="grid-2">
+                    <div>
+                        <label for="inUsdBanco">COMPRAR AL BANCO USD</label>
+                        <input type="number" id="inUsdBanco" step="0.01" min="10" placeholder="MÍNIMO 10" oninput="calc('usdBanco')">
+                    </div>
+                    <div>
+                        <label for="inBpay">A TECLEAR EN BPAY USD</label>
+                        <input type="number" id="inBpay" min="0" oninput="calc('bpay')">
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="inUsdt">NETO DESEADO EN BINANCE USDT</label>
+                    <input type="number" id="inUsdt" min="0" oninput="calc('usdt')">
+                </div>
             </div>
-        </div>
 
-        <div style="margin-bottom: 15px;">
-            <label for="inBs">COSTO DE LA OPERACIÓN BS</label>
-            <input type="number" id="inBs" placeholder="EJ: 370889.22" min="0" oninput="calc('bs')">
-        </div>
-        
-        <div class="grid-2">
-            <div>
-                <label for="inUsdBanco">COMPRAR AL BANCO USD</label>
-                <input type="number" id="inUsdBanco" step="0.01" min="10" placeholder="MÍNIMO 10 USD" oninput="calc('usdBanco')">
+            <div class="card" style="padding: 15px 25px;">
+                <span class="sec-title" style="margin-bottom: 10px; border:none; padding:0;"><i class="material-symbols-rounded">autorenew</i> REINVERSIÓN RÁPIDA</span>
+                <label for="inReinvertir">USDT EN BINANCE PARA VENDER</label>
+                <input type="number" id="inReinvertir" placeholder="EJ: 150" min="0" oninput="calc('reinvertir')">
             </div>
-            <div>
-                <label for="inBpay">A TECLEAR EN BPAY USD</label>
-                <input type="number" id="inBpay" min="0" oninput="calc('bpay')">
+
+        </div>
+
+        <!-- COLUMNA DERECHA: RESULTADOS -->
+        <div class="right-col">
+            
+            <div class="card">
+                <span class="sec-title"><i class="material-symbols-rounded">receipt_long</i> ACCIONES A REALIZAR</span>
+                
+                <div class="step">
+                    <div class="step-icon"><i class="material-symbols-rounded" style="font-size: 1.2em;">account_balance</i></div>
+                    <span class="step-text">COMPRAR EN EL BDV</span>
+                    <span class="step-val" id="outComprar">0.00 USD</span> 
+                </div>
+                <div class="step">
+                    <div class="step-icon"><i class="material-symbols-rounded" style="font-size: 1.2em;">keyboard</i></div>
+                    <span class="step-text">TECLEAR EN BPAY</span>
+                    <span class="step-val" id="outTeclear">0.00 USD</span>
+                </div>
+                <div class="step">
+                    <div class="step-icon"><i class="material-symbols-rounded" style="font-size: 1.2em;">wallet</i></div>
+                    <span class="step-text">RECIBES EN BINANCE</span>
+                    <span class="step-val val-usdt" id="outRecibes">0.00 USDT</span>
+                </div>
             </div>
-        </div>
-        
-        <div>
-            <label for="inUsdt">NETO DESEADO EN BINANCE USDT</label>
-            <input type="number" id="inUsdt" min="0" oninput="calc('usdt')">
-        </div>
-    </div>
 
-    <div class="board">
-        <div style="text-align: center; font-size: 0.7em; color: var(--text-muted); margin-bottom: 15px; text-transform: uppercase; font-weight: 700; letter-spacing: 2px;">
-            ACCIONES EXACTAS A REALIZAR
-        </div>
-        
-        <div class="step">
-            <span class="step-num">01</span>
-            <span class="step-text">COMPRAR EN EL BDV</span>
-            <span class="step-val" id="outComprar">0.00 USD</span> 
-        </div>
-        <div class="step">
-            <span class="step-num">02</span>
-            <span class="step-text">TECLEAR EN BPAY</span>
-            <span class="step-val" id="outTeclear">0.00 USD</span>
-        </div>
-        <div class="step">
-            <span class="step-num">03</span>
-            <span class="step-text">RECIBES EN BINANCE</span>
-            <span class="step-val val-usdt" id="outRecibes">0.00 USDT</span>
-        </div>
-    </div>
+            <div class="profit-box" id="profitContainer">
+                <span class="profit-title"><i class="material-symbols-rounded">trending_up</i> PROYECCIÓN DE GANANCIA P2P</span>
+                <span class="profit-bs" id="outGananciaBs">0.00 BS</span>
+                <span class="profit-usdt" id="outGananciaUsdt">+0.00 USDT</span>
+            </div>
 
-    <div class="profit-box">
-        <span class="profit-title">PROYECCIÓN DE GANANCIA P2P</span>
-        <span class="profit-bs" id="outGananciaBs">0.00 BS</span>
-        <span class="profit-usdt" id="outGananciaUsdt">+0.00 USDT</span>
-    </div>
+            <div class="footer-note">
+                <i class="material-symbols-rounded" style="font-size: 1em; vertical-align: middle;">verified_user</i> 
+                ALGORITMO SEGURO ACTIVADO (-0.02 USD EN BPAY)<br><br>
+                MÍNIMO BANCO: 10 USD (PERMITE DECIMALES).<br>
+                CÁLCULO ASUME COSTO TOTAL DE BOLÍVARES GASTADOS.
+            </div>
 
-    <div class="footer-note">
-        * ALGORITMO DE NÚMERO SEGURO ACTIVADO -0.02 USD AL CALCULAR BPAY<br>
-        * COMPRA EN BANCO MÍNIMO 10 USD PERMITE DECIMALES<br>
-        NOTA: EL CÁLCULO DE GANANCIA ASUME EL COSTO TOTAL DE LOS BS GASTADOS
+        </div>
     </div>
 </div>
 
 <script>
     function toggleTheme() {
         const body = document.body;
-        const btn = document.getElementById('themeToggle');
+        const btnText = document.getElementById('themeText');
+        const btnIcon = document.getElementById('themeIcon');
+        
         if (body.getAttribute('data-theme') === 'dark') {
             body.removeAttribute('data-theme');
-            btn.innerText = '🌙 NOCHE';
+            btnText.innerText = 'NOCHE';
+            btnIcon.innerText = 'dark_mode';
         } else {
             body.setAttribute('data-theme', 'dark');
-            btn.innerText = '☀️ DÍA';
+            btnText.innerText = 'DÍA';
+            btnIcon.innerText = 'light_mode';
         }
     }
 
@@ -495,18 +541,27 @@
 
         const elGanBs = document.getElementById('outGananciaBs');
         const elGanUsdt = document.getElementById('outGananciaUsdt');
+        const profitContainer = document.getElementById('profitContainer');
 
         elGanBs.innerText = (gananciaBs >= 0 ? "+" : "") + gananciaBs.toLocaleString('es-VE', {minimumFractionDigits: 2}) + " BS";
         elGanUsdt.innerText = (gananciaUsdt >= 0 ? "+" : "") + gananciaUsdt.toFixed(2) + " USDT";
         
-        elGanBs.style.color = gananciaBs >= 0 ? "var(--text-main)" : "var(--danger)";
-        elGanUsdt.style.color = gananciaBs >= 0 ? "var(--success)" : "var(--danger)";
-        
-        const profitBox = document.querySelector('.profit-box');
         if(gananciaBs < 0 && usdt > 0) {
-            profitBox.style.backgroundColor = "rgba(255, 135, 135, 0.1)";
+            elGanBs.style.color = "var(--danger)";
+            elGanUsdt.style.color = "var(--danger)";
+            elGanUsdt.style.borderColor = "rgba(239, 68, 68, 0.2)";
+            profitContainer.style.background = "linear-gradient(135deg, var(--danger-bg), var(--bg-card))";
+            profitContainer.style.borderColor = "var(--danger)";
+            profitContainer.querySelector('.profit-title').style.color = "var(--danger)";
+            profitContainer.querySelector('.profit-title i').innerText = "trending_down";
         } else {
-            profitBox.style.backgroundColor = "var(--success-bg)";
+            elGanBs.style.color = "var(--text-main)";
+            elGanUsdt.style.color = "var(--success)";
+            elGanUsdt.style.borderColor = "rgba(16, 185, 129, 0.2)";
+            profitContainer.style.background = "linear-gradient(135deg, var(--success-bg), var(--bg-card))";
+            profitContainer.style.borderColor = "var(--success)";
+            profitContainer.querySelector('.profit-title').style.color = "var(--success)";
+            profitContainer.querySelector('.profit-title i').innerText = "trending_up";
         }
     }
 </script>

@@ -14,19 +14,17 @@
     <style>
         /* VARIABLES DE TEMA MINIMALISTA Y ELEGANTE */
         :root {
-            /* MODO CLARO - Degradado suave de fondo */
-            --bg-body-1: #f0f4f8;
-            --bg-body-2: #e2e8f0;
+            var(--bg-body-1): #f0f4f8;
+            var(--bg-body-2): #e2e8f0;
             --bg-card: #ffffff;
             --bg-input: #f8fafc;
             --text-main: #1e293b;
             --text-muted: #64748b;
             --border: #e2e8f0;
             
-            /* COLORES DE ACENTO */
-            --accent: #6366f1; /* Indigo suave */
+            --accent: #6366f1; 
             --accent-hover: #4f46e5;
-            --success: #10b981; /* Esmeralda */
+            --success: #10b981; 
             --success-bg: #ecfdf5;
             --warning: #f59e0b;
             --danger: #ef4444;
@@ -39,7 +37,6 @@
         }
 
         [data-theme="dark"] {
-            /* MODO OSCURO - Tonos pizarra y azul noche */
             --bg-body-1: #0f172a;
             --bg-body-2: #020617;
             --bg-card: #1e293b;
@@ -57,7 +54,6 @@
             --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.5);
         }
 
-        /* ESTILOS GENERALES */
         body { 
             font-family: 'Inter', sans-serif; 
             background: radial-gradient(circle at top left, var(--bg-body-1), var(--bg-body-2));
@@ -70,119 +66,49 @@
             transition: var(--transition);
         }
 
-        .app-container {
-            width: 100%;
-            max-width: 1000px; /* Ensanchado para aprovechar los lados */
-        }
+        .app-container { width: 100%; max-width: 1000px; }
 
-        /* HEADER */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.2em;
-            font-weight: 800;
-            letter-spacing: 1px;
-            color: var(--text-main);
-        }
-
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .logo { display: flex; align-items: center; gap: 10px; font-size: 1.2em; font-weight: 800; letter-spacing: 1px; }
         .logo i { color: var(--accent); font-size: 1.4em; }
 
         .theme-btn {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            padding: 8px 16px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 0.85em;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            box-shadow: var(--shadow-sm);
-            transition: var(--transition);
+            background: var(--bg-card); border: 1px solid var(--border); color: var(--text-main);
+            padding: 8px 16px; border-radius: 30px; cursor: pointer; font-size: 0.85em;
+            font-weight: 700; display: flex; align-items: center; gap: 6px;
+            box-shadow: var(--shadow-sm); transition: var(--transition);
         }
         .theme-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
 
-        /* GRID LAYOUT PRINCIPAL */
-        .layout-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 25px;
-        }
+        .layout-grid { display: grid; grid-template-columns: 1fr; gap: 25px; }
+        @media (min-width: 850px) { .layout-grid { grid-template-columns: 1.2fr 1fr; align-items: start; } }
 
-        @media (min-width: 850px) {
-            .layout-grid {
-                grid-template-columns: 1.2fr 1fr; /* 2 Columnas en PC */
-                align-items: start;
-            }
-        }
-
-        /* TARJETAS / PANELES */
         .card { 
-            background: var(--bg-card); 
-            padding: 25px; 
-            border-radius: var(--radius); 
-            border: 1px solid var(--border); 
-            box-shadow: var(--shadow-lg); 
-            margin-bottom: 25px;
-            transition: var(--transition);
+            background: var(--bg-card); padding: 25px; border-radius: var(--radius); 
+            border: 1px solid var(--border); box-shadow: var(--shadow-lg); 
+            margin-bottom: 25px; transition: var(--transition);
         }
 
         .sec-title { 
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.8em; 
-            font-weight: 800; 
-            color: var(--accent); 
-            text-transform: uppercase; 
-            letter-spacing: 1px;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; gap: 8px; font-size: 0.8em; font-weight: 800; 
+            color: var(--accent); text-transform: uppercase; letter-spacing: 1px;
+            margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border);
         }
         .sec-title i { font-size: 1.4em; }
 
         label { 
-            display: block; 
-            font-size: 0.75em; 
-            color: var(--text-muted); 
-            margin-bottom: 8px; 
-            font-weight: 700; 
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            display: block; font-size: 0.75em; color: var(--text-muted); 
+            margin-bottom: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
         }
 
         input { 
-            width: 100%; 
-            padding: 14px 16px; 
-            background: var(--bg-input); 
-            border: 1px solid var(--border); 
-            color: var(--text-main); 
-            border-radius: 12px; 
-            font-size: 1.1em; 
-            font-family: 'Inter', sans-serif;
-            font-weight: 600; 
-            box-sizing: border-box; 
-            outline: none; 
-            transition: var(--transition); 
+            width: 100%; padding: 14px 16px; background: var(--bg-input); 
+            border: 1px solid var(--border); color: var(--text-main); border-radius: 12px; 
+            font-size: 1.1em; font-family: 'Inter', sans-serif; font-weight: 600; 
+            box-sizing: border-box; outline: none; transition: var(--transition); 
         }
 
-        input:focus { 
-            background: var(--bg-card);
-            border-color: var(--accent); 
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
-        }
-
+        input:focus { background: var(--bg-card); border-color: var(--accent); box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15); }
         input::placeholder { color: var(--text-muted); opacity: 0.5; }
 
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
@@ -193,103 +119,47 @@
         .input-warning:focus { border-color: var(--warning); box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.15); }
         .input-success:focus { border-color: var(--success); box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15); }
 
-        /* TABLERO DE INSTRUCCIONES */
-        .step { 
-            display: flex; 
-            align-items: center; 
-            padding: 16px 0; 
-            border-bottom: 1px dashed var(--border); 
-        }
+        .step { display: flex; align-items: center; padding: 16px 0; border-bottom: 1px dashed var(--border); }
         .step:last-child { border-bottom: none; padding-bottom: 0; }
         .step:first-child { padding-top: 0; }
 
         .step-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
-            background: var(--bg-input);
-            color: var(--accent);
-            border-radius: 10px;
-            margin-right: 15px;
-            border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center; width: 36px; height: 36px;
+            background: var(--bg-input); color: var(--accent); border-radius: 10px;
+            margin-right: 15px; border: 1px solid var(--border);
         }
 
-        .step-text { 
-            font-size: 0.85em; 
-            font-weight: 600; 
-            color: var(--text-muted); 
-            flex-grow: 1; 
-            text-transform: uppercase;
-        }
-
-        .step-val { 
-            font-size: 1.25em; 
-            font-weight: 800; 
-            color: var(--text-main); 
-        }
+        .step-text { font-size: 0.85em; font-weight: 600; color: var(--text-muted); flex-grow: 1; text-transform: uppercase; }
+        .step-val { font-size: 1.25em; font-weight: 800; color: var(--text-main); }
         .val-usdt { color: var(--success); }
 
-        /* CAJA DE GANANCIA */
         .profit-box { 
             background: linear-gradient(135deg, var(--success-bg), var(--bg-card)); 
-            border-radius: var(--radius); 
-            padding: 30px 20px; 
-            text-align: center; 
-            border: 1px solid var(--success);
-            transition: var(--transition);
+            border-radius: var(--radius); padding: 30px 20px; text-align: center; 
+            border: 1px solid var(--success); transition: var(--transition);
         }
 
         .profit-title { 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            font-size: 0.8em; 
-            color: var(--success); 
-            font-weight: 800; 
-            margin-bottom: 15px; 
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            font-size: 0.8em; color: var(--success); font-weight: 800; 
+            margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1.5px;
         }
 
-        .profit-bs { 
-            font-size: 2.5em; 
-            font-weight: 800; 
-            color: var(--text-main); 
-            display: block; 
-            line-height: 1;
-        }
-
+        .profit-bs { font-size: 2.5em; font-weight: 800; color: var(--text-main); display: block; line-height: 1; }
         .profit-usdt { 
-            font-size: 1.1em; 
-            color: var(--success); 
-            font-weight: 700; 
-            margin-top: 10px;
-            display: inline-block;
-            background: var(--bg-card);
-            padding: 4px 12px;
-            border-radius: 20px;
-            border: 1px solid rgba(16, 185, 129, 0.2);
+            font-size: 1.1em; color: var(--success); font-weight: 700; margin-top: 10px;
+            display: inline-block; background: var(--bg-card); padding: 4px 12px;
+            border-radius: 20px; border: 1px solid rgba(16, 185, 129, 0.2);
         }
 
-        /* SOBRANTE BANCO */
         .sobrante-panel {
-            background: var(--bg-input); 
-            padding: 16px; 
-            border-radius: 12px; 
-            border-left: 4px solid var(--success);
-            margin-bottom: 20px;
+            background: var(--bg-input); padding: 16px; border-radius: 12px; 
+            border-left: 4px solid var(--success); margin-bottom: 20px;
         }
 
         .footer-note {
-            text-align: center; 
-            font-size: 0.7em; 
-            color: var(--text-muted); 
-            margin-top: 15px;
-            line-height: 1.8;
-            font-weight: 600;
+            text-align: center; font-size: 0.7em; color: var(--text-muted); 
+            margin-top: 15px; line-height: 1.8; font-weight: 600;
         }
     </style>
 </head>
@@ -316,25 +186,31 @@
                 <div class="grid-2">
                     <div>
                         <label for="tasaB">TASA BDV (BS/USD)</label>
-                        <input type="number" id="tasaB" value="611" min="0" oninput="calc('tasas')">
+                        <input type="number" id="tasaB" value="615.52" min="0" oninput="calc('tasas')">
                     </div>
                     <div>
                         <label for="tasaP">VENTA P2P (BS/USDT)</label>
-                        <input type="number" id="tasaP" value="630" min="0" oninput="calc('tasas')">
+                        <input type="number" id="tasaP" value="780" min="0" oninput="calc('tasas')">
                     </div>
                 </div>
-                <div class="grid-3">
+                <div class="grid-2">
                     <div>
-                        <label for="feeCompraBdv">% COM. BDV</label>
+                        <label for="feeCompraBdv">% COM. COMPRA BS</label>
                         <input type="number" id="feeCompraBdv" class="input-danger" value="0.5" step="0.1" min="0" oninput="calc('tasas')">
                     </div>
                     <div>
-                        <label for="feeTarjeta">% COM. TARJ</label>
-                        <input type="number" id="feeTarjeta" value="2.52" step="0.01" min="0" oninput="calc('tasas')">
+                        <label for="feeTarjeta">% COM. USO TARJ</label>
+                        <input type="number" id="feeTarjeta" value="2.51" step="0.01" min="0" oninput="calc('tasas')">
                     </div>
+                </div>
+                <div class="grid-2" style="margin-bottom: 0;">
                     <div>
                         <label for="feeBpay">% COM. BPAY</label>
                         <input type="number" id="feeBpay" class="input-warning" value="3.6" step="0.1" min="0" oninput="calc('tasas')">
+                    </div>
+                    <div>
+                        <label for="feeZinli">% COM. ZINLI</label>
+                        <input type="number" id="feeZinli" class="input-warning" value="3.75" step="0.01" min="0" oninput="calc('tasas')">
                     </div>
                 </div>
             </div>
@@ -342,7 +218,6 @@
             <div class="card">
                 <span class="sec-title"><i class="material-symbols-rounded">calculate</i> CALCULADORA DE FLUJO</span>
                 
-                <!-- Panel de Sobrante Destacado -->
                 <div class="sobrante-panel">
                     <label for="inSaldo" style="color: var(--success); margin-bottom: 5px;">SALDO EN TU BANCO BS (OPCIONAL)</label>
                     <input type="number" id="inSaldo" class="input-success" placeholder="EJ: 372000" min="0" oninput="calc('saldo')" style="background: var(--bg-card); border-color: transparent; margin-bottom: 8px;">
@@ -362,14 +237,20 @@
                         <input type="number" id="inUsdBanco" step="0.01" min="10" placeholder="MÍNIMO 10" oninput="calc('usdBanco')">
                     </div>
                     <div>
-                        <label for="inBpay">A TECLEAR EN BPAY USD</label>
-                        <input type="number" id="inBpay" min="0" oninput="calc('bpay')">
+                        <label for="inUsdt">NETO DESEADO USDT</label>
+                        <input type="number" id="inUsdt" min="0" oninput="calc('usdt')">
                     </div>
                 </div>
-                
-                <div>
-                    <label for="inUsdt">NETO DESEADO EN BINANCE USDT</label>
-                    <input type="number" id="inUsdt" min="0" oninput="calc('usdt')">
+
+                <div class="grid-2" style="margin-bottom: 0;">
+                    <div>
+                        <label for="inBpay">A TECLEAR EN BPAY</label>
+                        <input type="number" id="inBpay" min="0" oninput="calc('bpay')">
+                    </div>
+                    <div>
+                        <label for="inZinli">A TECLEAR EN ZINLI</label>
+                        <input type="number" id="inZinli" min="0" placeholder="EJ: 56.83" oninput="calc('zinli')">
+                    </div>
                 </div>
             </div>
 
@@ -389,13 +270,18 @@
                 
                 <div class="step">
                     <div class="step-icon"><i class="material-symbols-rounded" style="font-size: 1.2em;">account_balance</i></div>
-                    <span class="step-text">COMPRAR EN EL BDV</span>
+                    <span class="step-text">TOTAL DEBITADO (USD)</span>
                     <span class="step-val" id="outComprar">0.00 USD</span> 
                 </div>
                 <div class="step">
                     <div class="step-icon"><i class="material-symbols-rounded" style="font-size: 1.2em;">keyboard</i></div>
                     <span class="step-text">TECLEAR EN BPAY</span>
                     <span class="step-val" id="outTeclear">0.00 USD</span>
+                </div>
+                <div class="step">
+                    <div class="step-icon"><i class="material-symbols-rounded" style="font-size: 1.2em;">credit_card</i></div>
+                    <span class="step-text">O TECLEAR EN ZINLI</span>
+                    <span class="step-val" id="outZinli">0.00 USD</span>
                 </div>
                 <div class="step">
                     <div class="step-icon"><i class="material-symbols-rounded" style="font-size: 1.2em;">wallet</i></div>
@@ -413,8 +299,8 @@
             <div class="footer-note">
                 <i class="material-symbols-rounded" style="font-size: 1em; vertical-align: middle;">verified_user</i> 
                 ALGORITMO SEGURO ACTIVADO (-0.02 USD EN BPAY)<br><br>
+                ZINLI: CÁLCULO EXACTO QUE ASEGURA FONDOS<br>
                 MÍNIMO BANCO: 10 USD (PERMITE DECIMALES).<br>
-                CÁLCULO ASUME COSTO TOTAL DE BOLÍVARES GASTADOS.
             </div>
 
         </div>
@@ -449,9 +335,10 @@
         const feeCompraBdv = Math.max(0, parseFloat(document.getElementById('feeCompraBdv').value) || 0) / 100;
         const feeTarjeta = Math.max(0, parseFloat(document.getElementById('feeTarjeta').value) || 0) / 100;
         const feeBpay = Math.max(0, parseFloat(document.getElementById('feeBpay').value) || 0) / 100;
+        const feeZinli = Math.max(0, parseFloat(document.getElementById('feeZinli').value) || 0) / 100;
 
         let saldo = parseFloat(document.getElementById('inSaldo').value) || 0;
-        let bs = 0, usdBanco = 0, bpay = 0, usdt = 0;
+        let bs = 0, usdBanco = 0, bpay = 0, usdt = 0, zinli = 0;
 
         if (origen === 'reinvertir') {
             const usdtInicial = Math.max(0, parseFloat(document.getElementById('inReinvertir').value) || 0);
@@ -463,13 +350,15 @@
         if (origen === 'saldo') {
             let rawUsd = saldo / (tb * (1 + feeCompraBdv));
             usdBanco = Math.floor(rawUsd * 100) / 100;
-            
             bs = usdBanco * tb * (1 + feeCompraBdv);
             
             let rawBpay = usdBanco / (1 + feeTarjeta);
             bpay = Math.floor(rawBpay * 100) / 100;
             if (bpay > 0) bpay = Math.max(0, bpay - 0.02);
             usdt = bpay * (1 - feeBpay);
+
+            let rawZinli = (usdBanco / (1 + feeTarjeta)) / (1 + feeZinli);
+            zinli = Math.floor(rawZinli * 100) / 100;
         }
         else if (origen === 'bs') {
             bs = Math.max(0, parseFloat(document.getElementById('inBs').value) || 0);
@@ -480,6 +369,9 @@
             bpay = Math.floor(rawBpay * 100) / 100;
             if (bpay > 0) bpay = Math.max(0, bpay - 0.02);
             usdt = bpay * (1 - feeBpay);
+
+            let rawZinli = (usdBanco / (1 + feeTarjeta)) / (1 + feeZinli);
+            zinli = Math.floor(rawZinli * 100) / 100;
         } 
         else if (origen === 'usdBanco') {
             usdBanco = Math.max(0, parseFloat(document.getElementById('inUsdBanco').value) || 0);
@@ -489,6 +381,9 @@
             bpay = Math.floor(rawBpay * 100) / 100;
             if (bpay > 0) bpay = Math.max(0, bpay - 0.02); 
             usdt = bpay * (1 - feeBpay);
+
+            let rawZinli = (usdBanco / (1 + feeTarjeta)) / (1 + feeZinli);
+            zinli = Math.floor(rawZinli * 100) / 100;
         }
         else if (origen === 'bpay') {
             bpay = Math.max(0, parseFloat(document.getElementById('inBpay').value) || 0);
@@ -497,6 +392,22 @@
             if (usdBanco > 0 && usdBanco < 10) usdBanco = 10; 
             
             bs = usdBanco * tb * (1 + feeCompraBdv);
+            usdt = bpay * (1 - feeBpay);
+
+            let rawZinli = (usdBanco / (1 + feeTarjeta)) / (1 + feeZinli);
+            zinli = Math.floor(rawZinli * 100) / 100;
+        }
+        else if (origen === 'zinli') {
+            zinli = Math.max(0, parseFloat(document.getElementById('inZinli').value) || 0);
+            let reqZinli = zinli * (1 + feeZinli);
+            usdBanco = Math.ceil(reqZinli * (1 + feeTarjeta) * 100) / 100;
+            if (usdBanco > 0 && usdBanco < 10) usdBanco = 10; 
+
+            bs = usdBanco * tb * (1 + feeCompraBdv);
+            
+            let rawBpay = usdBanco / (1 + feeTarjeta);
+            bpay = Math.floor(rawBpay * 100) / 100;
+            if (bpay > 0) bpay = Math.max(0, bpay - 0.02);
             usdt = bpay * (1 - feeBpay);
         }
         else if (origen === 'usdt') {
@@ -508,9 +419,12 @@
             if (usdBanco > 0 && usdBanco < 10) usdBanco = 10; 
             
             bs = usdBanco * tb * (1 + feeCompraBdv);
+
+            let rawZinli = (usdBanco / (1 + feeTarjeta)) / (1 + feeZinli);
+            zinli = Math.floor(rawZinli * 100) / 100;
         }
 
-        // Mostrar sobrante
+        // --- CÁLCULO DE SOBRANTE (FALTABA EN TU CÓDIGO) ---
         const elSobrante = document.getElementById('outSobrante');
         if (saldo > 0) {
             let sobrante = saldo - bs;
@@ -519,49 +433,60 @@
                 elSobrante.style.color = "var(--danger)";
             } else {
                 elSobrante.innerText = sobrante.toFixed(2) + " BS";
-                elSobrante.style.color = "var(--success)";
+                elSobrante.style.color = "var(--text-muted)";
             }
         } else {
             elSobrante.innerText = "0.00 BS";
             elSobrante.style.color = "var(--text-muted)";
         }
 
+        // --- ACTUALIZACIÓN DE CASILLAS DE ENTRADA ---
         if (origen !== 'bs' && origen !== 'saldo') document.getElementById('inBs').value = bs > 0 ? bs.toFixed(2) : '';
         if (origen !== 'usdBanco') document.getElementById('inUsdBanco').value = usdBanco > 0 ? usdBanco.toFixed(2) : '';
         if (origen !== 'bpay') document.getElementById('inBpay').value = bpay > 0 ? bpay.toFixed(2) : '';
+        if (origen !== 'zinli') document.getElementById('inZinli').value = zinli > 0 ? zinli.toFixed(2) : '';
         if (origen !== 'usdt') document.getElementById('inUsdt').value = usdt > 0 ? usdt.toFixed(2) : '';
 
+        // --- ACTUALIZACIÓN DE PANEL DE ACCIONES ---
         document.getElementById('outComprar').innerText = usdBanco.toFixed(2) + " USD";
         document.getElementById('outTeclear').innerText = bpay.toFixed(2) + " USD";
+        document.getElementById('outZinli').innerText = zinli.toFixed(2) + " USD";
         document.getElementById('outRecibes').innerText = usdt.toFixed(2) + " USDT";
 
-        const retornoBs = usdt * tp;
-        const gananciaBs = (usdt > 0) ? (retornoBs - bs) : 0;
-        const gananciaUsdt = (usdt > 0) ? (gananciaBs / tp) : 0;
+        // --- PROYECCIÓN DE GANANCIA P2P ---
+        let ingresoBs = usdt * tp;
+        let gananciaBs = ingresoBs - bs;
+        let gananciaUsdt = tp > 0 ? (gananciaBs / tp) : 0;
 
-        const elGanBs = document.getElementById('outGananciaBs');
-        const elGanUsdt = document.getElementById('outGananciaUsdt');
-        const profitContainer = document.getElementById('profitContainer');
+        const profitBox = document.getElementById('profitContainer');
+        const outGananciaBs = document.getElementById('outGananciaBs');
+        const outGananciaUsdt = document.getElementById('outGananciaUsdt');
 
-        elGanBs.innerText = (gananciaBs >= 0 ? "+" : "") + gananciaBs.toLocaleString('es-VE', {minimumFractionDigits: 2}) + " BS";
-        elGanUsdt.innerText = (gananciaUsdt >= 0 ? "+" : "") + gananciaUsdt.toFixed(2) + " USDT";
-        
-        if(gananciaBs < 0 && usdt > 0) {
-            elGanBs.style.color = "var(--danger)";
-            elGanUsdt.style.color = "var(--danger)";
-            elGanUsdt.style.borderColor = "rgba(239, 68, 68, 0.2)";
-            profitContainer.style.background = "linear-gradient(135deg, var(--danger-bg), var(--bg-card))";
-            profitContainer.style.borderColor = "var(--danger)";
-            profitContainer.querySelector('.profit-title').style.color = "var(--danger)";
-            profitContainer.querySelector('.profit-title i').innerText = "trending_down";
+        if (bs > 0) {
+            outGananciaBs.innerText = (gananciaBs >= 0 ? "+" : "") + gananciaBs.toFixed(2) + " BS";
+            outGananciaUsdt.innerText = (gananciaUsdt >= 0 ? "+" : "") + gananciaUsdt.toFixed(2) + " USDT";
+            
+            if (gananciaBs < 0) {
+                profitBox.style.background = "linear-gradient(135deg, var(--danger-bg), var(--bg-card))";
+                profitBox.style.borderColor = "var(--danger)";
+                document.querySelector('.profit-title').style.color = "var(--danger)";
+                outGananciaUsdt.style.color = "var(--danger)";
+                outGananciaUsdt.style.borderColor = "rgba(239, 68, 68, 0.2)";
+            } else {
+                profitBox.style.background = "linear-gradient(135deg, var(--success-bg), var(--bg-card))";
+                profitBox.style.borderColor = "var(--success)";
+                document.querySelector('.profit-title').style.color = "var(--success)";
+                outGananciaUsdt.style.color = "var(--success)";
+                outGananciaUsdt.style.borderColor = "rgba(16, 185, 129, 0.2)";
+            }
         } else {
-            elGanBs.style.color = "var(--text-main)";
-            elGanUsdt.style.color = "var(--success)";
-            elGanUsdt.style.borderColor = "rgba(16, 185, 129, 0.2)";
-            profitContainer.style.background = "linear-gradient(135deg, var(--success-bg), var(--bg-card))";
-            profitContainer.style.borderColor = "var(--success)";
-            profitContainer.querySelector('.profit-title').style.color = "var(--success)";
-            profitContainer.querySelector('.profit-title i').innerText = "trending_up";
+            outGananciaBs.innerText = "0.00 BS";
+            outGananciaUsdt.innerText = "+0.00 USDT";
+            profitBox.style.background = "";
+            profitBox.style.borderColor = "";
+            document.querySelector('.profit-title').style.color = "";
+            outGananciaUsdt.style.color = "";
+            outGananciaUsdt.style.borderColor = "";
         }
     }
 </script>

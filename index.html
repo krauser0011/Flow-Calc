@@ -185,8 +185,8 @@
                 <span class="sec-title"><i class="material-symbols-rounded">monitoring</i> MERCADO Y TASAS</span>
                 <div class="grid-2">
                     <div>
-                        <label for="tasaB">TASA BDV (BS/USD)</label>
-                        <input type="number" id="tasaB" value="615.52" min="0" oninput="calc('tasas')">
+                        <label for="tasaB">TASA BCV (BS/USD)</label>
+                        <input type="number" id="tasaB" value="36.00" min="0" oninput="calc('tasas')">
                     </div>
                     <div>
                         <label for="tasaP">VENTA P2P (BS/USDT)</label>
@@ -206,7 +206,8 @@
                 <div class="grid-2" style="margin-bottom: 0;">
                     <div>
                         <label for="feeBpay">% COM. BPAY</label>
-                        <input type="number" id="feeBpay" class="input-warning" value="3.6" step="0.1" min="0" oninput="calc('tasas')">
+                        <!-- Actualizado a 4.1 -->
+                        <input type="number" id="feeBpay" class="input-warning" value="4.1" step="0.1" min="0" oninput="calc('tasas')">
                     </div>
                     <div>
                         <label for="feeZinli">% COM. ZINLI</label>
@@ -301,6 +302,9 @@
                 ALGORITMO SEGURO ACTIVADO (-0.02 USD EN BPAY)<br><br>
                 ZINLI: CÁLCULO EXACTO QUE ASEGURA FONDOS<br>
                 MÍNIMO BANCO: 10 USD (PERMITE DECIMALES).<br>
+                <span style="color: var(--accent); margin-top: 5px; display: inline-block;">
+                    TASA BCV AUTOMATIZADA: SE ACTUALIZA A LAS 8 PM
+                </span>
             </div>
 
         </div>
@@ -308,6 +312,62 @@
 </div>
 
 <script>
+    // --- LÓGICA DE OBTENCIÓN AUTOMÁTICA DE TASA BCV ---
+    async function actualizarTasaBCV() {
+        try {
+            // Se utiliza una API pública estable para obtener la tasa oficial del BCV de Venezuela
+            const respuesta = await fetch('https://ve.dolarapi.com/v1/dolares/oficial');
+            const datos = await respuesta.json();
+            
+            if (datos && datos.promedio) {
+                const inputTasa = document.getElementById('tasaB');
+                inputTasa.value = datos.promedio.toFixed(2);
+                calc('tasas'); // Forzar recálculo tras actualizar tasa
+            }
+        } catch (error) {
+            console.error('Error al actualizar la tasa del BCV automáticamente:', error);
+        }
+    }
+
+    // Configuración al cargar la ventana
+    window.addEventListener('load', () => {
+        // 1. Obtener la tasa inmediatamente al cargar
+        actualizarTasaBCV();
+        
+        // 2. Establecer un temporizador para comprobar la hora todos los días a las 8:00 PM (hora de Venezuela)
+        setInterval(() => {
+            const ahora = new Date();
+            // Formatear la fecha/hora actual utilizando la zona horaria de Caracas
+            const opciones = { 
+                timeZone: 'America/Caracas', 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit', 
+                hour12: false 
+            };
+            
+            const formatter = new Intl.DateTimeFormat('es-VE', opciones);
+            const partes = formatter.formatToParts(ahora);
+            
+            let hora = '';
+            let minuto = '';
+            let segundo = '';
+            
+            for (const parte of partes) {
+                if (parte.type === 'hour') hora = parte.value;
+                if (parte.type === 'minute') minuto = parte.value;
+                if (parte.type === 'second') segundo = parte.value;
+            }
+            
+            const horaCaracas = `${hora}:${minuto}:${segundo}`;
+            
+            // Si son exactamente las 20:00:00, ejecutamos la función
+            if (horaCaracas === '20:00:00') {
+                actualizarTasaBCV();
+            }
+        }, 1000); // Comprueba cada segundo
+    });
+ // --- RESTO DEL CÓDIGO ORIGINAL ---
     function toggleTheme() {
         const body = document.body;
         const btnText = document.getElementById('themeText');
@@ -424,7 +484,6 @@
             zinli = Math.floor(rawZinli * 100) / 100;
         }
 
-        // --- CÁLCULO DE SOBRANTE (FALTABA EN TU CÓDIGO) ---
         const elSobrante = document.getElementById('outSobrante');
         if (saldo > 0) {
             let sobrante = saldo - bs;
@@ -440,20 +499,17 @@
             elSobrante.style.color = "var(--text-muted)";
         }
 
-        // --- ACTUALIZACIÓN DE CASILLAS DE ENTRADA ---
         if (origen !== 'bs' && origen !== 'saldo') document.getElementById('inBs').value = bs > 0 ? bs.toFixed(2) : '';
         if (origen !== 'usdBanco') document.getElementById('inUsdBanco').value = usdBanco > 0 ? usdBanco.toFixed(2) : '';
         if (origen !== 'bpay') document.getElementById('inBpay').value = bpay > 0 ? bpay.toFixed(2) : '';
         if (origen !== 'zinli') document.getElementById('inZinli').value = zinli > 0 ? zinli.toFixed(2) : '';
         if (origen !== 'usdt') document.getElementById('inUsdt').value = usdt > 0 ? usdt.toFixed(2) : '';
 
-        // --- ACTUALIZACIÓN DE PANEL DE ACCIONES ---
         document.getElementById('outComprar').innerText = usdBanco.toFixed(2) + " USD";
         document.getElementById('outTeclear').innerText = bpay.toFixed(2) + " USD";
         document.getElementById('outZinli').innerText = zinli.toFixed(2) + " USD";
         document.getElementById('outRecibes').innerText = usdt.toFixed(2) + " USDT";
 
-        // --- PROYECCIÓN DE GANANCIA P2P ---
         let ingresoBs = usdt * tp;
         let gananciaBs = ingresoBs - bs;
         let gananciaUsdt = tp > 0 ? (gananciaBs / tp) : 0;
